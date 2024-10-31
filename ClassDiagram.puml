@@ -7,6 +7,7 @@ package "Model" {
         -name: String
         -email: String
         -phone: int
+        -address: Address
         +login()
         +createAccount()
         +updateProfile()
@@ -15,7 +16,6 @@ package "Model" {
     class Donor extends Person{
         -donationHistory: DonationDetails
         -nationalID: int
-        -address: Address
         +trackDonationHistory()
         +trackDonationStatus()
         +setRecurringDonations()
@@ -27,7 +27,6 @@ package "Model" {
 
     class HospitalAdmin extends Person{
         -hospitalID: int
-        -address: Address
         +uploadRequiredItems()
         +notifyExpiringMedicine()
         +manageItems()
