@@ -1,0 +1,286 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package "Model" {
+    abstract class  Person{
+        -personID: int
+        -name: String
+        -email: String
+        -phone: int
+        +login()
+        +createAccount()
+        +updateProfile()
+    }
+
+    class Donor extends Person{
+        -donationHistory: DonationDetails
+        -nationalID: int
+        -address: Address
+        +trackDonationHistory()
+        +trackDonationStatus()
+        +setRecurringDonations()
+        +receiveReminder()
+        +fillDonationForm()
+        +choosePickUpOrDropOff()
+        +receiveNotification()
+    }
+
+    class HospitalAdmin extends Person{
+        -hospitalID: int
+        -address: Address
+        +uploadRequiredItems()
+        +notifyExpiringMedicine()
+        +manageItems()
+        +updateDonationRequest()
+        +reviewDonation()
+        +receiveNotification()
+    }
+
+    class Address{
+        -street: String
+        -city: String
+        -state: String
+        -zip: int
+    }
+
+    abstract class Item{
+        -itemID: int
+        -name: String
+        -quantityAvailable: int
+        +checkAvailability()
+    }
+
+    class Medicine extends Item{
+        -expiryDate: date
+        +checkExpiry()
+    }
+
+    class Equipment extends Item{
+        -condition: String
+        +checkCondition()
+    }
+
+    interface Donate{
+        +makeDonation()
+    }
+
+    class DonationDetails{
+        -donationDetailsID:int
+        -donationID:int
+        -medicineID: int
+        -equipmentID: int
+        -quantity: int
+        +getDetails()
+    }
+
+    class BasicDonation implements Donate{
+        -donationID
+        -medicineID
+        -quantity
+        +makeDonation()
+    }
+
+    abstract class DonationDecorator implements Donate{
+        -wrappedDonation: Donation
+        +makeDonation()
+    }
+
+    class RecurringDonation extends DonationDecorator{
+        -frequency
+        +makeDonation()
+    }
+
+
+    class MedicalEquipmentDonation extends DonationDecorator{
+        -equipmentList: List
+        +makeDonation()
+    }
+
+
+    class FundsDonation extends DonationDecorator{
+        -amount
+        +makeDonation()
+    }
+
+
+}
+
+package  "View"{
+
+        abstract class BaseView {
+            +render()
+            +update()
+        }
+
+        class DonorDashboardView extends BaseView {
+            +displayDonationHistory()
+            +showDonationForm()
+            +displayNotifications()
+        }
+
+        class HospitalAdminDashboardView extends BaseView {
+            +displayInventory()
+            +showDonationRequests()
+            +displayNotifications()
+        }
+
+        class LoginView extends BaseView {
+            +showLoginForm()
+            +displayError()
+        }
+
+        class PaymentView extends BaseView {
+            +showPaymentForm()
+            +displayConfirmation()
+        }
+}
+
+
+package "Controller"{
+
+    class PaymentHandler{
+        -paymentStrategy: PaymentStrategy
+        -paymentID: int
+        -amount: int
+        -date: date
+        -paymentMethod: String
+        +makePayment()
+
+    }
+
+    class LoginHandler{
+        -loginStrategy: LoginStrategy
+        +login(userCredentials)
+    }
+
+    class SearchHandler{
+        -searchStrategy: SearchStrategy
+        +search(searchQuery)
+    }
+
+    class DonationFilterHandler{
+        -filterStrategy: FilterStrategy
+        +filter(searchQuery)
+    }
+
+    class DonationHistoryFilterHandler{
+        -filterStrategy: FilterStrategy
+        +filter(searchQuery)
+    }
+
+}
+
+
+
+interface PaymentStrategy{
+    +pay(paymentDetails)
+}
+
+class OnlinePayment implements PaymentStrategy{
+    +pay(paymentDetails)
+}
+
+class CashPayment implements PaymentStrategy{
+    +pay(paymentDetails)
+}
+
+
+
+interface Notification{
+    +sendNotification(donorID, message)
+}
+
+
+class EmailNotification implements Notification{
+    +send(donorID, message)
+}
+
+class InAppNotifcation implements Notification{
+    +send(donorID, message)
+}
+
+
+class NotificationFactory{
+    +createNotification()
+}
+
+
+interface LoginStrategy{
+    +login(userCredentials)
+}
+
+class EmailLogin implements LoginStrategy{
+    +login(userCredentials)
+}
+
+class GoogleLogin implements LoginStrategy{
+    +login(userCredentials)
+}
+
+class FacebookLogin implements LoginStrategy{
+    +login(userCredentials)
+}
+
+
+interface SearchStrategy{
+    +search(searchQuery)
+}
+
+class SearchByMedicine implements SearchStrategy{
+    +search(searchQuery)
+}
+
+class SearchByHospital implements SearchStrategy{
+    +search(searchQuery)
+}
+
+class SearchByEquipment implements SearchStrategy{
+    +search(searchQuery)
+}
+
+interface FilterStrategy{
+    +filter(searchQuery)
+}
+
+class FilterByRecentGroup implements FilterStrategy{
+    +filter(searchQuery)
+}
+
+class FilterByItemTypeGroup implements FilterStrategy{
+    +filter(searchQuery)
+}
+
+class FilterByHospitalGroup implements FilterStrategy{
+    +filter(searchQuery)
+}
+
+class FilterByUrgencyGroup implements FilterStrategy{
+    +filter(searchQuery)
+}
+
+
+
+Donor *-- BasicDonation
+Donor o-- DonationDetails
+Medicine *-- DonationDetails
+BasicDonation *-- DonationDetails
+DonationDecorator o-- Donate
+LoginHandler o-- LoginStrategy
+Donor -- LoginHandler
+SearchHandler o-- SearchStrategy
+Donor -- SearchHandler
+HospitalAdmin o-- Item
+Equipment *-- DonationDetails
+Donor *-- Address
+PaymentHandler o-- PaymentStrategy
+Donor -- PaymentHandler
+Donor -- DonationHistoryFilterHandler
+DonationHistoryFilterHandler o-- FilterStrategy
+HospitalAdmin *-- Address
+HospitalAdmin -- DonationFilterHandler
+DonationFilterHandler o-- FilterStrategy
+Person <-- NotificationFactory
+NotificationFactory --> EmailNotification
+NotificationFactory --> InAppNotifcation
+
+@enduml
