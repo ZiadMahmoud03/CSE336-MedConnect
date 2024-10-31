@@ -35,11 +35,10 @@ package "Model" {
         +receiveNotification()
     }
 
-    class Address{
-        -street: String
-        -city: String
-        -state: String
-        -zip: int
+    class Address {
+        -address_id: int
+        -name: String
+        -parent_id: int 
     }
 
     abstract class Item{
@@ -281,5 +280,6 @@ DonationFilterHandler o-- FilterStrategy
 Person <-- NotificationFactory
 NotificationFactory --> EmailNotification
 NotificationFactory --> InAppNotifcation
+Address "0..*" --> "1" Address : Parent
 
 @enduml
