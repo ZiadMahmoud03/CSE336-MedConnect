@@ -12,10 +12,13 @@ package "Model" {
         +updateProfile()
     }
 
-    class Donor extends Person {
+    class User extends Person {
         -donationHistory: DonationDetails
         -nationalID: int
         -address: Address
+        -feedbackHistory: Feedback
+        -registeredEvents: Event
+        -skills: List<String>
         +trackDonationHistory()
         +trackDonationStatus()
         +setRecurringDonations()
@@ -23,6 +26,11 @@ package "Model" {
         +fillDonationForm()
         +choosePickUpOrDropOff()
         +receiveNotification()
+        +signUpForEvent(Event event)
+        +updateSkills(List<String> newSkills)
+        +provideFeedback(Event event, EventFeedback feedback)
+        +checkAvailability()
+        
     }
 
     class HospitalAdmin extends Person {
@@ -47,6 +55,34 @@ package "Model" {
         -name: String
         -quantityAvailable: int
         +checkAvailability()
+    }
+
+    class VolunteerDetails{
+        -volunteerID: int
+        -eventID: int
+        -hours: int
+        +getDetails()
+    }
+
+    class Event{
+        -eventID: int
+        -name: String
+        -date: date
+        -location: String
+        -description: String
+        -volunteerList: List
+        +createEvent()
+        +updateEvent()
+        +deleteEvent()
+        +notifyVolunteers()
+    }
+
+    class EventDetails{
+        -eventDetailsID: int
+        -eventID: int
+        -volunteerID: int
+        -attendance: String
+        +getDetails()
     }
 
     class Medicine extends Item {
@@ -250,7 +286,9 @@ package "Controller" {
         +createNotification()
     }
 
-    class DonationController{}
+    class DonationController{
+
+    }
 
     class UserController{}
 
@@ -259,21 +297,21 @@ package "Controller" {
 
 }
 
-Donor *-- BasicDonation
-Donor o-- DonationDetails
+User *-- BasicDonation
+User o-- DonationDetails
 Medicine *-- DonationDetails
 BasicDonation *-- DonationDetails
 DonationDecorator o-- Donate
 LoginHandler o-- LoginStrategy
-Donor -- LoginHandler
+User -- LoginHandler
 SearchHandler o-- SearchStrategy
-Donor -- SearchHandler
+User -- SearchHandler
 HospitalAdmin o-- Item
 Equipment *-- DonationDetails
-Donor *-- Address
+User *-- Address
 PaymentHandler o-- PaymentStrategy
-Donor -- PaymentHandler
-Donor -- DonationHistoryFilterHandler
+User -- PaymentHandler
+User -- DonationHistoryFilterHandler
 DonationHistoryFilterHandler o-- FilterStrategy
 HospitalAdmin *-- Address
 HospitalAdmin -- DonationFilterHandler
@@ -282,5 +320,8 @@ Person <-- NotificationFactory
 NotificationFactory --> EmailNotification
 NotificationFactory --> InAppNotification
 Address "0..*" --> "1" Address : Parent
+Event *-- EventDetails
+User o-- VolunteerDetails
+Event -- User
 
 @enduml
