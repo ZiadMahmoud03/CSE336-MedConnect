@@ -135,9 +135,29 @@ package "Model" {
         +makeDonation()
     }
 
+    class EventFeedback {
+        -feedbackID: int
+        -eventID: int
+        -userID: int
+        -rating: int
+        -comments: String
+        +createFeedback(rating: int, comments: String)
+        +getFeedbackDetails(): String
+    }
+
+    class Feedback {
+        -feedbackID: int
+        -userID: int
+        -feedbackText: String
+        -date: Date
+        +recordFeedback(feedbackText: String, date: Date)
+        +getFeedback(): String
+    }
+
 }
 
 package "View" {
+    
     abstract class BaseView {
         +render()
         +update()
@@ -165,12 +185,12 @@ package "View" {
         +displayConfirmation()
     }
 
-    class DonationHistoryView {
+    class DonationHistoryView extends BaseView {
         +displayDonationHistory()
         +displayDonationDetails()
     }
 
-    class RegistrationView {
+    class RegistrationView extends BaseView {
         +showRegistrationForm()
         +displayError()
     }
@@ -286,13 +306,27 @@ package "Controller" {
         +createNotification()
     }
 
-    class DonationController{
-
+    class DonationController {
+        +createDonation(donationDetails)
+        +updateDonation(donationID, updatedDetails)
+        +cancelDonation(donationID)
+        +viewDonationStatus(donationID)
     }
 
-    class UserController{}
+    class UserController {
+        +registerUser(userDetails)
+        +loginUser(userCredentials)
+        +updateProfile(userID, updatedDetails)
+        +trackDonationHistory(userID)
+    }
 
-    class AccountController{}
+
+    class AccountController {
+        +resetPassword(userID)
+        +changeEmail(userID, newEmail)
+        +changePhoneNumber(userID, newPhoneNumber)
+        +deactivateAccount(userID)
+    }
 
 
 }
@@ -323,5 +357,19 @@ Address "0..*" --> "1" Address : Parent
 Event *-- EventDetails
 User o-- VolunteerDetails
 Event -- User
+User o-- Feedback 
+Event o-- EventFeedback 
+User *-- EventFeedback 
+DonationController o-- Notification  
+UserController o-- LoginStrategy  
+AccountController --> Person  
+AccountController -- NotificationFactory
+DonorDashboardView --> DonationController 
+HospitalAdminDashboardView --> DonationController 
+LoginView --> LoginHandler 
+PaymentView --> PaymentHandler 
+DonationHistoryView --> DonationController 
+RegistrationView --> UserController 
+
 
 @enduml
