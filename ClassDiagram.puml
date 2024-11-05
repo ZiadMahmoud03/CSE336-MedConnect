@@ -1,6 +1,20 @@
 @startuml
 'https://plantuml.com/class-diagram
 
+
+left to right direction
+
+' Adjust skin parameters for better layout and straight lines
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam lineThickness 2
+skinparam defaultFontName Arial
+skinparam nodeMargin 30
+skinparam componentStyle rectangle
+
+' Ensure straight lines
+skinparam linetype ortho
+
 package "Model" {
     abstract class Person {
         -personID: int
@@ -31,7 +45,6 @@ package "Model" {
         +updateSkills(List<String> newSkills)
         +provideFeedback(Event event, EventFeedback feedback)
         +checkAvailability()
-        
     }
 
     class HospitalAdmin extends Person {
@@ -58,14 +71,14 @@ package "Model" {
         +checkAvailability()
     }
 
-    class VolunteerDetails{
+    class VolunteerDetails {
         -volunteerID: int
         -eventID: int
         -hours: int
         +getDetails()
     }
 
-    class Event{
+    class Event {
         -eventID: int
         -name: String
         -date: date
@@ -79,7 +92,7 @@ package "Model" {
         +addFeedback(EventFeedback feedback)
     }
 
-    class EventDetails{
+    class EventDetails {
         -eventDetailsID: int
         -eventID: int
         -volunteerID: int
@@ -126,12 +139,9 @@ package "Model" {
         +getFeedbackDetails(): String
         +getRatings(): int
     }
-
-
 }
 
 package "View" {
-    
     abstract class BaseView {
         +render()
         +update()
@@ -228,8 +238,6 @@ package "Controller" {
         +trackDonationHistory(userID)
     }
 
-
-
     class EventController {
         +createEvent(eventDetails)
         +updateEvent(eventID, updatedDetails)
@@ -238,9 +246,7 @@ package "Controller" {
     }
 }
 
-
 package "Services" {
-
     abstract class DonationDecorator {
         -wrappedDonation: Donate
         +makeDonation()
@@ -261,20 +267,37 @@ package "Services" {
         +makeDonation()
     }
 
-     interface Notification {
-        +sendNotification(donorID, message)
+    interface Observer {
+        +update(notificationType: String, message: String)
     }
 
-    class EmailNotification implements Notification {
-        +send(donorID, message)
+    class EmailNotification implements Observer {
+        -status: String
+        +update(notificationType: String, message: String)
     }
 
-    class InAppNotification implements Notification {
-        +send(donorID, message)
+    class InAppNotification implements Observer {
+        -status: String
+        +update(notificationType: String, message: String)
     }
 
-    class NotificationFactory {
-        +createNotification()
+    class SMSNotification implements Observer {
+        -status: String
+        +update(notificationType: String, message: String)
+    }
+
+    interface Subject {
+        +subscribe(observer: Observer)
+        +unsubscribe(observer: Observer)
+        +notifySubscribers(notificationType: String, message: String)
+    }
+
+    class NotificationSubject extends Subject {
+        -subscribers: List<Observer>
+        -state: String
+        +subscribe(observer: Observer)
+        +unsubscribe(observer: Observer)
+        +notifySubscribers(notificationType: String, message: String)
     }
 
     interface PaymentStrategy {
@@ -340,15 +363,13 @@ package "Services" {
     class FilterByUrgencyGroup implements FilterStrategy {
         +filter(searchQuery)
     }
-
-   
 } 
 
+' Define relationships between classes
 User *-- BasicDonation
 User o-- DonationDetails
 Medicine *-- DonationDetails
 BasicDonation *-- DonationDetails
-DonationDecorator o-- Donate
 LoginController o-- LoginStrategy
 User -- LoginController
 SearchController o-- SearchStrategy
@@ -363,19 +384,14 @@ DonationHistoryFilterController o-- FilterStrategy
 HospitalAdmin *-- Address
 HospitalAdmin -- DonationFilterController
 DonationFilterController o-- FilterStrategy
-Person <-- NotificationFactory
-NotificationFactory --> EmailNotification
-NotificationFactory --> InAppNotification
 Address "0..*" --> "1" Address : Parent
 Event *-- EventDetails
 User o-- VolunteerDetails
 Event -- User
 User *-- EventFeedback 
 Event o-- EventFeedback 
-DonationController o-- Notification  
 UserController o-- LoginStrategy  
 UserController --> Person  
-UserController -- NotificationFactory
 DonorDashboardView --> DonationController 
 HospitalAdminDashboardView --> DonationController 
 LoginView --> LoginController 
@@ -383,9 +399,12 @@ PaymentView --> PaymentController
 DonationHistoryView --> DonationController 
 RegistrationView --> UserController 
 Person <-- UserController
-Donate <-- DonationDecorator
+Donate <--o DonationDecorator
 User -- EventDetails
 Event -- EventController
-
+DonationController <-- NotificationSubject
+UserController <-- NotificationSubject
+EventController <-- NotificationSubject
+NotificationSubject o--> Observer
 
 @enduml
