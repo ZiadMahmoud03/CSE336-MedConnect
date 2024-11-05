@@ -63,8 +63,7 @@ class LoginController {
     }
 
     public function showLoginForm() {
-        # require 'views/login.php';
-        echo "Login form goes here";
+        require 'views/login.php';
     }
     
 }

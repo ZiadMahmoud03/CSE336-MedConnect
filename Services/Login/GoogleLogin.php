@@ -1,17 +1,22 @@
-<?php 
+<?php
 
 class GoogleLogin implements ILoginStrategy {
-    public function login(array $userCredentials) {
+    private $userModel;
 
+    public function __construct() {
+        $this->userModel = new User(); 
+    }
+
+    public function login(array $userCredentials) {
         $token = $userCredentials['token'];
 
-        // Assume GoogleAuthService handles Google authentication (will be implemented later)
-        $user = GoogleAuthService::authenticate($token);
+        // Here you would typically validate the Google token
+        $user = $this->userModel->findByGoogleToken($token);
 
-        if ($user) {
-            return $user; 
+        if (!$user) {
+            throw new Exception("Invalid Google token or user not registered.");
         }
 
-        throw new Exception("Google login failed.");
+        return $user;
     }
 }
