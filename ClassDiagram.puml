@@ -4,7 +4,7 @@
 
 left to right direction
 
-' Adjust skin parameters for better layout and straight lines
+
 skinparam classAttributeIconSize 0
 skinparam classFontSize 12
 skinparam lineThickness 2
@@ -12,7 +12,7 @@ skinparam defaultFontName Arial
 skinparam nodeMargin 30
 skinparam componentStyle rectangle
 
-' Ensure straight lines
+
 skinparam linetype ortho
 
 package "Model" {
@@ -30,7 +30,6 @@ package "Model" {
         -donationHistory: DonationDetails
         -nationalID: int
         -address: Address
-        -feedbackHistory: Feedback
         -registeredEvents: Event
         -skills: List<String>
         -isVolunteer: boolean
@@ -43,7 +42,6 @@ package "Model" {
         +receiveNotification()
         +signUpForEvent(Event event)
         +updateSkills(List<String> newSkills)
-        +provideFeedback(Event event, EventFeedback feedback)
         +checkAvailability()
     }
 
@@ -89,7 +87,6 @@ package "Model" {
         +updateEvent()
         +deleteEvent()
         +notifyVolunteers()
-        +addFeedback(EventFeedback feedback)
     }
 
     class EventDetails {
@@ -130,18 +127,11 @@ package "Model" {
         +makeDonation()
     }
 
-    class EventFeedback {
-        -feedbackID: int
-        -eventID: int
-        -userID: int
-        -rating: int
-        -comments: String
-        +getFeedbackDetails(): String
-        +getRatings(): int
-    }
+   
 }
 
 package "View" {
+    
     abstract class BaseView {
         +render()
         +update()
@@ -179,18 +169,31 @@ package "View" {
         +displayError()
     }
 
-    class EventFeedbackView extends BaseView {
-        +showFeedbackForm()
-        +displayFeedback()
-    }
-
     class NotificationView extends BaseView {
         +displayNotification()
     }
 
     class EventView extends BaseView {
         +showEventDetails()
-        +displayEventFeedback()
+       
+    }
+
+    class UserProfileView extends BaseView {
+        +showProfileDetails()
+        +showUpdateForm()
+    }
+
+    class VolunteerRegistrationView extends BaseView {
+        +showVolunteerForm()
+        +displayConfirmation()
+    }
+
+    class SearchResultsView extends BaseView {
+        +displayResults()
+    }
+
+    class FilterResultsView extends BaseView {
+        +displayFilteredResults()
     }
 }
 
@@ -388,8 +391,7 @@ Address "0..*" --> "1" Address : Parent
 Event *-- EventDetails
 User o-- VolunteerDetails
 Event -- User
-User *-- EventFeedback 
-Event o-- EventFeedback 
+
 UserController o-- LoginStrategy  
 UserController --> Person  
 DonorDashboardView --> DonationController 
