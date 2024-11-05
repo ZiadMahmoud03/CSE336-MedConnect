@@ -20,6 +20,7 @@ package "Model" {
         -personID: int
         -name: String
         -email: String
+        -address: Address
         -phone: int
         +login()
         +createAccount()
@@ -29,7 +30,6 @@ package "Model" {
     class User extends Person {
         -donationHistory: DonationDetails
         -nationalID: int
-        -address: Address
         -registeredEvents: Event
         -skills: List<String>
         -isVolunteer: boolean
@@ -47,7 +47,6 @@ package "Model" {
 
     class HospitalAdmin extends Person {
         -hospitalID: int
-        -address: Address
         +uploadRequiredItems()
         +notifyExpiringMedicine()
         +manageItems()
@@ -65,6 +64,7 @@ package "Model" {
     abstract class Item {
         -itemID: int
         -name: String
+        -itemDescription : String
         -quantityAvailable: int
         +checkAvailability()
     }
