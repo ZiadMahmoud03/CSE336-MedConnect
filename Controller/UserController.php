@@ -3,7 +3,7 @@ class UserController {
     protected $userService;
 
     public function __construct() {
-        $this->userService = new UserService(); // Ideally, use dependency injection
+        $this->userService = new UserService(); 
     }
 
     public function register() {
