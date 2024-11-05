@@ -1,11 +1,11 @@
 <?php
-    return(object) array(
+    return (object) array(
 
         // Application configuration
         'SITE_NAME'     => "MedConnect",
         'APP_ROOT'      => dirname(dirname(__FILE__)),
-        'URL_ROOT'      => '',
-        'URL_SUBFOLDER' => '',
+        'URL_ROOT'      => 'http://localhost/HOSPITALDONATIONS', // Adjust if hosted on a server or subfolder
+        'URL_SUBFOLDER' => '', // Leave empty if accessing directly as a folder
 
         // Database configuration
         'DB_HOST' => 'localhost',
@@ -13,7 +13,7 @@
         'DB_PASS' => '',
         'DB_NAME' => 'medconnect',
 
-        //Database tables
+        // Database tables
         'DB_ADDRESS_TABLE'=> 'Address',
         'DB_PERSON_TABLE'=> 'Person',
         'DB_USER_TABLE'=> 'User',
@@ -27,8 +27,6 @@
         'DB_EVENT_DETAILS_TABLE'=> 'EventDetails',
         'DB_VOLUNTEER_DETAILS_TABLE'=> 'VolunteerDetails',
 
-
-        //Routes
-
-    )
+        // Routes can be defined here if needed
+    );
 ?>
