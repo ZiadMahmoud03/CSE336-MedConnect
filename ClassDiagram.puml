@@ -19,6 +19,7 @@ package "Model" {
         -feedbackHistory: Feedback
         -registeredEvents: Event
         -skills: List<String>
+        -isVolunteer: boolean
         +trackDonationHistory()
         +trackDonationStatus()
         +setRecurringDonations()
@@ -75,6 +76,7 @@ package "Model" {
         +updateEvent()
         +deleteEvent()
         +notifyVolunteers()
+        +addFeedback(EventFeedback feedback)
     }
 
     class EventDetails{
@@ -115,44 +117,16 @@ package "Model" {
         +makeDonation()
     }
 
-    abstract class DonationDecorator {
-        -wrappedDonation: Donate
-        +makeDonation()
-    }
-
-    class RecurringDonation extends DonationDecorator {
-        -frequency
-        +makeDonation()
-    }
-
-    class MedicalEquipmentDonation extends DonationDecorator {
-        -equipmentList: List
-        +makeDonation()
-    }
-
-    class FundsDonation extends DonationDecorator {
-        -amount
-        +makeDonation()
-    }
-
     class EventFeedback {
         -feedbackID: int
         -eventID: int
         -userID: int
         -rating: int
         -comments: String
-        +createFeedback(rating: int, comments: String)
         +getFeedbackDetails(): String
+        +getRatings(): int
     }
 
-    class Feedback {
-        -feedbackID: int
-        -userID: int
-        -feedbackText: String
-        -date: Date
-        +recordFeedback(feedbackText: String, date: Date)
-        +getFeedback(): String
-    }
 
 }
 
@@ -194,10 +168,24 @@ package "View" {
         +showRegistrationForm()
         +displayError()
     }
+
+    class EventFeedbackView extends BaseView {
+        +showFeedbackForm()
+        +displayFeedback()
+    }
+
+    class NotificationView extends BaseView {
+        +displayNotification()
+    }
+
+    class EventView extends BaseView {
+        +showEventDetails()
+        +displayEventFeedback()
+    }
 }
 
 package "Controller" {
-    class PaymentHandler {
+    class PaymentController {
         -paymentStrategy: PaymentStrategy
         -paymentID: int
         -amount: int
@@ -206,24 +194,87 @@ package "Controller" {
         +makePayment()
     }
 
-    class LoginHandler {
+    class LoginController {
         -loginStrategy: LoginStrategy
         +login(userCredentials)
     }
 
-    class SearchHandler {
+    class SearchController {
         -searchStrategy: SearchStrategy
         +search(searchQuery)
     }
 
-    class DonationFilterHandler {
+    class DonationFilterController {
         -filterStrategy: FilterStrategy
         +filter(searchQuery)
     }
 
-    class DonationHistoryFilterHandler {
+    class DonationHistoryFilterController {
         -filterStrategy: FilterStrategy
         +filter(searchQuery)
+    }
+
+    class DonationController {
+        +createDonation(donationDetails)
+        +updateDonation(donationID, updatedDetails)
+        +cancelDonation(donationID)
+        +viewDonationStatus(donationID)
+    }
+
+    class UserController {
+        +registerUser(userDetails)
+        +loginUser(userCredentials)
+        +updateProfile(userID, updatedDetails)
+        +trackDonationHistory(userID)
+    }
+
+
+
+    class EventController {
+        +createEvent(eventDetails)
+        +updateEvent(eventID, updatedDetails)
+        +deleteEvent(eventID)
+        +notifyVolunteers(eventID)
+    }
+}
+
+
+package "Services" {
+
+    abstract class DonationDecorator {
+        -wrappedDonation: Donate
+        +makeDonation()
+    }
+
+    class RecurringDonation extends DonationDecorator {
+        -frequency
+        +makeDonation()
+    }
+
+    class MedicalEquipmentDonation extends DonationDecorator {
+        -equipmentList: List
+        +makeDonation()
+    }
+
+    class FundsDonation extends DonationDecorator {
+        -amount
+        +makeDonation()
+    }
+
+     interface Notification {
+        +sendNotification(donorID, message)
+    }
+
+    class EmailNotification implements Notification {
+        +send(donorID, message)
+    }
+
+    class InAppNotification implements Notification {
+        +send(donorID, message)
+    }
+
+    class NotificationFactory {
+        +createNotification()
     }
 
     interface PaymentStrategy {
@@ -290,66 +341,28 @@ package "Controller" {
         +filter(searchQuery)
     }
 
-    interface Notification {
-        +sendNotification(donorID, message)
-    }
-
-    class EmailNotification implements Notification {
-        +send(donorID, message)
-    }
-
-    class InAppNotification implements Notification {
-        +send(donorID, message)
-    }
-
-    class NotificationFactory {
-        +createNotification()
-    }
-
-    class DonationController {
-        +createDonation(donationDetails)
-        +updateDonation(donationID, updatedDetails)
-        +cancelDonation(donationID)
-        +viewDonationStatus(donationID)
-    }
-
-    class UserController {
-        +registerUser(userDetails)
-        +loginUser(userCredentials)
-        +updateProfile(userID, updatedDetails)
-        +trackDonationHistory(userID)
-    }
-
-
-    class AccountController {
-        +resetPassword(userID)
-        +changeEmail(userID, newEmail)
-        +changePhoneNumber(userID, newPhoneNumber)
-        +deactivateAccount(userID)
-    }
-
-
-}
+   
+} 
 
 User *-- BasicDonation
 User o-- DonationDetails
 Medicine *-- DonationDetails
 BasicDonation *-- DonationDetails
 DonationDecorator o-- Donate
-LoginHandler o-- LoginStrategy
-User -- LoginHandler
-SearchHandler o-- SearchStrategy
-User -- SearchHandler
+LoginController o-- LoginStrategy
+User -- LoginController
+SearchController o-- SearchStrategy
+User -- SearchController
 HospitalAdmin o-- Item
 Equipment *-- DonationDetails
 User *-- Address
-PaymentHandler o-- PaymentStrategy
-User -- PaymentHandler
-User -- DonationHistoryFilterHandler
-DonationHistoryFilterHandler o-- FilterStrategy
+PaymentController o-- PaymentStrategy
+User -- PaymentController
+User -- DonationHistoryFilterController
+DonationHistoryFilterController o-- FilterStrategy
 HospitalAdmin *-- Address
-HospitalAdmin -- DonationFilterHandler
-DonationFilterHandler o-- FilterStrategy
+HospitalAdmin -- DonationFilterController
+DonationFilterController o-- FilterStrategy
 Person <-- NotificationFactory
 NotificationFactory --> EmailNotification
 NotificationFactory --> InAppNotification
@@ -357,19 +370,22 @@ Address "0..*" --> "1" Address : Parent
 Event *-- EventDetails
 User o-- VolunteerDetails
 Event -- User
-User o-- Feedback 
-Event o-- EventFeedback 
 User *-- EventFeedback 
+Event o-- EventFeedback 
 DonationController o-- Notification  
 UserController o-- LoginStrategy  
-AccountController --> Person  
-AccountController -- NotificationFactory
+UserController --> Person  
+UserController -- NotificationFactory
 DonorDashboardView --> DonationController 
 HospitalAdminDashboardView --> DonationController 
-LoginView --> LoginHandler 
-PaymentView --> PaymentHandler 
+LoginView --> LoginController 
+PaymentView --> PaymentController 
 DonationHistoryView --> DonationController 
 RegistrationView --> UserController 
+Person <-- UserController
+Donate <-- DonationDecorator
+User -- EventDetails
+Event -- EventController
 
 
 @enduml
