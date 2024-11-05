@@ -1,4 +1,3 @@
--- Address table (used by both Donor and HospitalAdmin)
 CREATE TABLE Address (
     address_id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(222) NOT NULL,
@@ -6,22 +5,23 @@ CREATE TABLE Address (
     FOREIGN KEY (parent_id) REFERENCES Address(address_id) ON DELETE SET NULL
 );
 
-
--- Person table (abstract)
+-- Abstract Person table
 CREATE TABLE Person (
     person_id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255),
-    email VARCHAR(255),
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
     phone INT,
     address_id INT,
     FOREIGN KEY (address_id) REFERENCES Address(address_id)
 );
 
--- Donor table (inherits from Person)
-CREATE TABLE Donor (
-    donor_id INT PRIMARY KEY,
-    national_id INT,
+-- User table (inherits from Person)
+CREATE TABLE User (
+    user_id INT PRIMARY KEY,
     person_id INT,
+    national_id INT NOT NULL UNIQUE,
+    is_volunteer BOOLEAN DEFAULT FALSE,
+    skills TEXT,  -- serialized list of skills
     FOREIGN KEY (person_id) REFERENCES Person(person_id)
 );
 
@@ -33,17 +33,18 @@ CREATE TABLE HospitalAdmin (
     FOREIGN KEY (person_id) REFERENCES Person(person_id)
 );
 
--- Item table (abstract)
+-- Abstract Item table
 CREATE TABLE Item (
     item_id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255),
-    quantity_available INT
+    name VARCHAR(255) NOT NULL,
+    quantity_available INT DEFAULT 0,
+    description VARCHAR(255)
 );
 
 -- Medicine table (inherits from Item)
 CREATE TABLE Medicine (
     medicine_id INT PRIMARY KEY,
-    expiry_date DATE,
+    expiry_date DATE NOT NULL,
     item_id INT,
     FOREIGN KEY (item_id) REFERENCES Item(item_id)
 );
@@ -51,7 +52,7 @@ CREATE TABLE Medicine (
 -- Equipment table (inherits from Item)
 CREATE TABLE Equipment (
     equipment_id INT PRIMARY KEY,
-    `condition` VARCHAR(255),
+    `condition` VARCHAR(255) NOT NULL,
     item_id INT,
     FOREIGN KEY (item_id) REFERENCES Item(item_id)
 );
@@ -62,55 +63,46 @@ CREATE TABLE DonationDetails (
     donation_id INT,
     medicine_id INT,
     equipment_id INT,
-    quantity INT,
+    quantity INT NOT NULL,
     FOREIGN KEY (medicine_id) REFERENCES Medicine(medicine_id),
     FOREIGN KEY (equipment_id) REFERENCES Equipment(equipment_id)
 );
 
--- Donation table (abstract interface)
-CREATE TABLE Donation (
-    donation_id INT PRIMARY KEY AUTO_INCREMENT,
-    donor_id INT,
-    FOREIGN KEY (donor_id) REFERENCES Donor(donor_id)
-);
-
 -- BasicDonation table (implements Donation)
-CREATE TABLE BasicDonation (
-    basic_donation_id INT PRIMARY KEY,
-    donation_id INT,
+CREATE TABLE Donation (
+    donation_id INT PRIMARY KEY,
     medicine_id INT,
     quantity INT,
-    FOREIGN KEY (donation_id) REFERENCES Donation(donation_id),
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES User(user_id),
     FOREIGN KEY (medicine_id) REFERENCES Medicine(medicine_id)
 );
 
--- DonationDecorator table (abstract, uses Donation)
-CREATE TABLE DonationDecorator (
-    decorator_id INT PRIMARY KEY AUTO_INCREMENT,
-    donation_id INT,
-    FOREIGN KEY (donation_id) REFERENCES Donation(donation_id)
+-- Event table
+CREATE TABLE Event (
+    event_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    date DATE NOT NULL,
+    location VARCHAR(255),
+    description TEXT
 );
 
--- RecurringDonation table (inherits DonationDecorator)
-CREATE TABLE RecurringDonation (
-    recurring_donation_id INT PRIMARY KEY,
-    decorator_id INT,
-    frequency INT,
-    FOREIGN KEY (decorator_id) REFERENCES DonationDecorator(decorator_id)
+-- VolunteerDetails table
+CREATE TABLE VolunteerDetails (
+    volunteer_id INT PRIMARY KEY AUTO_INCREMENT,
+    event_id INT,
+    user_id INT,
+    hours INT DEFAULT 0,
+    FOREIGN KEY (event_id) REFERENCES Event(event_id),
+    FOREIGN KEY (user_id) REFERENCES User(user_id)
 );
 
--- MedicalEquipmentDonation table (inherits DonationDecorator)
-CREATE TABLE MedicalEquipmentDonation (
-    equipment_donation_id INT PRIMARY KEY,
-    decorator_id INT,
-    equipment_list TEXT,  -- serialized list of equipment or references to IDs
-    FOREIGN KEY (decorator_id) REFERENCES DonationDecorator(decorator_id)
-);
-
--- FundsDonation table (inherits DonationDecorator)
-CREATE TABLE FundsDonation (
-    funds_donation_id INT PRIMARY KEY,
-    decorator_id INT,
-    amount DECIMAL(10, 2),
-    FOREIGN KEY (decorator_id) REFERENCES DonationDecorator(decorator_id)
+-- EventDetails table (connects volunteers to specific events with attendance)
+CREATE TABLE EventDetails (
+    event_details_id INT PRIMARY KEY AUTO_INCREMENT,
+    event_id INT,
+    volunteer_id INT,
+    attendance VARCHAR(255),
+    FOREIGN KEY (event_id) REFERENCES Event(event_id),
+    FOREIGN KEY (volunteer_id) REFERENCES VolunteerDetails(volunteer_id)
 );
