@@ -138,10 +138,22 @@ package "View" {
         +update()
     }
 
+    class DonationView extends BaseView{
+        +showDonationForm()
+        +chooseLocation()
+        +displayItemDescription()
+    }
+
     class DonorDashboardView extends BaseView {
         +displayDonationHistory()
         +showDonationForm()
         +displayNotifications()
+    }
+    
+    class MoneyDonationView extends BaseView {
+        +showMoneyDonationForm()
+        +displayConfirmation()
+        +chooseLocation()
     }
 
     class HospitalAdminDashboardView extends BaseView {
@@ -155,10 +167,6 @@ package "View" {
         +displayError()
     }
 
-    class PaymentView extends BaseView {
-        +showPaymentForm()
-        +displayConfirmation()
-    }
 
     class DonationHistoryView extends BaseView {
         +displayDonationHistory()
@@ -199,13 +207,12 @@ package "View" {
 }
 
 package "Controller" {
-    class PaymentController {
-        -paymentStrategy: PaymentStrategy
-        -paymentID: int
+    class MoneyDonationController {
+        -moneydonationStrategy: MoneyDonationStrategy
+        -moneydonationID: int
         -amount: int
-        -date: date
-        -paymentMethod: String
-        +makePayment()
+        -moneydonationMethod: String
+        +makeMoneyDonation()
     }
 
     class LoginController {
@@ -225,6 +232,7 @@ package "Controller" {
 
     class DonationHistoryFilterController {
         -filterStrategy: FilterStrategy
+        -date: date
         +filter(searchQuery)
     }
 
@@ -304,16 +312,16 @@ package "Services" {
         +notifySubscribers(notificationType: String, message: String)
     }
 
-    interface PaymentStrategy {
-        +pay(paymentDetails)
+    interface MoneyDonationStrategy {
+        +pay(moneydonationDetails)
     }
 
-    class OnlinePayment implements PaymentStrategy {
-        +pay(paymentDetails)
+    class OnlineMoneyDonation implements MoneyDonationStrategy {
+        +pay(moneydonationDetails)
     }
 
-    class CashPayment implements PaymentStrategy {
-        +pay(paymentDetails)
+    class CashDonation implements MoneyDonationStrategy {
+        +pay(moneydonationDetails)
     }
 
     interface LoginStrategy {
@@ -381,8 +389,8 @@ User -- SearchController
 HospitalAdmin o-- Item
 Equipment *-- DonationDetails
 User *-- Address
-PaymentController o-- PaymentStrategy
-User -- PaymentController
+MoneyDonationController o-- MoneyDonationStrategy
+User -- MoneyDonationController
 User -- DonationHistoryFilterController
 DonationHistoryFilterController o-- FilterStrategy
 HospitalAdmin *-- Address
@@ -398,8 +406,9 @@ UserController --> Person
 DonorDashboardView --> DonationController 
 HospitalAdminDashboardView --> DonationController 
 LoginView --> LoginController 
-PaymentView --> PaymentController 
+MoneyDonationView --> MoneyDonationController 
 DonationHistoryView --> DonationController 
+EventView --> EventController 
 RegistrationView --> UserController 
 Person <-- UserController
 Donate <--o DonationDecorator
@@ -409,5 +418,13 @@ DonationController <-- NotificationSubject
 UserController <-- NotificationSubject
 EventController <-- NotificationSubject
 NotificationSubject o--> Observer
+
+UserProfileView --> UserController
+VolunteerRegistrationView --> UserController
+SearchResultsView --> SearchController
+HospitalAdminDashboardView --> UserController
+FilterResultsView --> DonationFilterController
+EventView --> EventController
+DonationView --> DonationController
 
 @enduml
