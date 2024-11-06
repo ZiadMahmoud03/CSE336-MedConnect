@@ -4,6 +4,10 @@ body
     margin:0;
 }
 
+h2{
+    margin-left: 20px;
+}
+
 
 
 /*-----------------------------------Registration Form------------------------*/
@@ -189,6 +193,44 @@ body
     margin-top: 10px;
 }
 
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    padding: 10px 15px;
+    cursor: pointer;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0; /* Aligns dropdown menu to the right of the button */
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.dropdown-menu a {
+    color: #333;
+    padding: 5px 6px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f1f1f1;
+}
+
+
  /*----------------------------------------------------------Homepage--------------------------------------------------------------------------*/
  
  .slider-container * {
@@ -302,7 +344,7 @@ body
 .slider-container .card h2 {
     font-weight: 500;
     font-size: 1.56rem;
-    margin: 20px 0 5px 10px;
+    margin: 20px 0 5px 20px;
 }
 
 .slider-container .card span {
