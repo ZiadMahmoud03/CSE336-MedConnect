@@ -24,9 +24,9 @@ body
 }
 
 .form-container form label {
-    display: block; /* Make label a block element */
-    text-align: left; /* Align text to the left */
-    margin-bottom: 5px; /* Add some space below the label */
+    display: block; 
+    text-align: left; 
+    margin-bottom: 5px; 
 }
 
  
@@ -89,7 +89,6 @@ body
     justify-content: center;
 }
 
-/* Individual social icons */
 .social {
     color: #fff;
     font-size: 20px;
@@ -109,27 +108,26 @@ body
     opacity: 0.8;
 }
 
-/* Fix for font alignment and size issues */
 .fab {
     font-size: 20px;
     line-height: 1;
 }
 
 
- /*----------------------------------------------------------HomePage--------------------------------------------------------------------------*/
+ /*----------------------------------------------------------Navbar--------------------------------------------------------------------------*/
 
 .navbar {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Added this line */
+    align-items: center;
     background-color: #f8f9fa;
     padding: 10px 20px;
     border-bottom: 1px solid #ddd;
 }
 
 .navbar .logo img {
-    width: 250px; /* Changed this line */
-    margin-right: 10px; /* Adjusted value */
+    width: 250px; 
+    margin-right: 10px; 
     height: 40px;
 }
 
@@ -182,7 +180,10 @@ body
 
 .navbar .fa-user 
 { 
-    font-size: 20px; /* Set icon size */ 
-    vertical-align: middle; /* Ensure vertical alignment */ 
+    font-size: 20px;
+    vertical-align: middle; 
     margin-top: 10px;
 }
+
+ /*----------------------------------------------------------Homepage--------------------------------------------------------------------------*/
+ 

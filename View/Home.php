@@ -6,8 +6,11 @@
     <title>Home Page</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/193fff84d2.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script> 
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <script src="script.js" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="home">
     <div class="navbar">
         <div class="logo">
             <img src="Logo.png" alt="Logo">
@@ -25,5 +28,9 @@
             <i class="fa-solid fa-user" style="color: #000000;"></i>
         </div>
     </div>
+    <div class="slider-container">  
+    <button class="prev" onclick="changeSlide(-1)">&#10094;</button>  
+    
+
 </body>
 </html>
