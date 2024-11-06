@@ -1,84 +1,188 @@
 <?php
+
+
+
+class UserModel {
+    
+        // Static array to simulate a database of users
+        private static $users = [
+            1 => ['email' => '', 'password' => 'hashedpassword1', 'national_id' => '123456789'],
+            2 => ['email' => 'jane@example.com', 'password' => 'hashedpassword2', 'national_id' => '987654321']
+        ];
+        private static $donationHistory = [
+            1 => [
+                ['donation_type' => 'medicine', 'amount' => 100, 'date' => '2024-01-10'],
+                ['donation_type' => 'equipment', 'amount' => 50, 'date' => '2024-02-15']
+            ],
+            2 => [
+                ['donation_type' => 'money', 'amount' => 200, 'date' => '2024-03-05']
+            ]
+        ];
+        // Register a new user
+        public static function register($email, $password, $nationalId) {
+            // Check if the email already exists
+            foreach (self::$users as $user) {
+                if ($user['email'] === $email) {
+                    return false; // Email is already taken
+                }
+            }
+    
+            // Add a new user with a simulated ID
+            $newUserId = count(self::$users) + 1;
+            self::$users[$newUserId] = [
+                'email' => $email,
+                'password' => password_hash($password, PASSWORD_BCRYPT),
+                'national_id' => $nationalId
+            ];
+    
+            return true; // User registered successfully
+        }
+    
+        // Update user profile by ID
+        public static function updateProfile($userId, $email, $nationalId) {
+            // Check if user exists
+            if (!isset(self::$users[$userId])) {
+                return false; // User not found
+            }
+    
+            // Update user data
+            self::$users[$userId]['email'] = $email;
+            self::$users[$userId]['national_id'] = $nationalId;
+    
+            return true; // Profile updated successfully
+        }
+    
+        // Get user by ID
+        public static function getUserById($userId) {
+            // Return user if exists, otherwise return null
+            return isset(self::$users[$userId]) ? self::$users[$userId] : null;
+        }
+    
+        // Delete a user profile by ID
+        public static function deleteProfile($userId) {
+            // Check if user exists
+            if (!isset(self::$users[$userId])) {
+                return false; // User not found
+            }
+    
+            // Remove user
+            unset(self::$users[$userId]);
+    
+            return true; // Profile deleted successfully
+        }
+        public static function trackDonationHistory($userId) {
+            // Check if the user exists
+            if (isset(self::$donationHistory[$userId])) {
+                return self::$donationHistory[$userId];
+            } else {
+                return "No donation history found for this user.";
+            }
+        }
+}
+
+
+
 class UserController {
-    protected $userService;
 
-    public function __construct() {
-        $this->userService = new UserService(); 
-    }
-
+    // Register new user
     public function register() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $username = $_POST['username'];
             $email = $_POST['email'];
             $password = $_POST['password'];
+            $nationalId = $_POST['national_id'];
 
-            // Call service to register user
-            $user = $this->userService->register($username, $email, $password);
+            // Use UserModel to register user
+            $user = UserModel::register($email, $password, $nationalId);
 
             if ($user) {
-                // Redirect to a success page or login
-                header('Location: /login');
-                exit();
+                // Registration successful
+                echo "User registered successfully!";
             } else {
                 // Handle registration failure
-                $_SESSION['error'] = 'Registration failed.';
+                echo "Email is already taken!";
             }
         }
 
-        // Show registration form
-        require 'views/register.php';
+        // Show registration form (just for testing purposes)
+        echo '<form method="POST">
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="text" name="national_id" placeholder="National ID" required>
+                <button type="submit">Register</button>
+              </form>';
     }
 
+    // Update user profile
     public function updateProfile() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $userId = $_SESSION['user_id']; // Assuming user ID is stored in session
-            $username = $_POST['username'];
+            $userId = $_SESSION['user_id'];  // Assuming user_id is stored in the session
             $email = $_POST['email'];
+            $nationalId = $_POST['national_id'];
 
-            // Call service to update user profile
-            $updated = $this->userService->updateProfile($userId, $username, $email);
+            // Use UserModel to update profile
+            $updated = UserModel::updateProfile($userId, $email, $nationalId);
 
             if ($updated) {
-                // Redirect to a success page
-                header('Location: /profile');
-                exit();
+                echo "Profile updated successfully!";
             } else {
-                // Handle update failure
-                $_SESSION['error'] = 'Update failed.';
+                echo "Update failed.";
             }
         }
 
         // Show profile update form
-        $userId = $_SESSION['user_id'];
-        $user = $this->userService->getUserById($userId);
-        require 'views/update_profile.php';
-    }
+        $userId = $_SESSION['user_id'];  // Assuming user_id is stored in session
+        $user = UserModel::getUserById($userId);
 
-    public function deleteProfile() {
-        $userId = $_SESSION['user_id']; // Assuming user ID is stored in session
-        $deleted = $this->userService->deleteProfile($userId);
-
-        if ($deleted) {
-            // Redirect to a success page or login after deletion
-            header('Location: /goodbye');
-            exit();
+        if ($user) {
+            echo '<form method="POST">
+                    <input type="email" name="email" value="' . $user['email'] . '" required>
+                    <input type="text" name="national_id" value="' . $user['national_id'] . '" required>
+                    <button type="submit">Update Profile</button>
+                  </form>';
         } else {
-            // Handle deletion failure
-            $_SESSION['error'] = 'Deletion failed.';
+            echo "User not found.";
         }
     }
 
+    // Delete user profile
+    public function deleteProfile() {
+        $userId = $_SESSION['user_id'];  // Assuming user_id is stored in the session
+        $deleted = UserModel::deleteProfile($userId);
+
+        if ($deleted) {
+            echo "Profile deleted successfully!";
+        } else {
+            echo "Profile deletion failed.";
+        }
+    }
+
+    // View user profile
     public function viewProfile() {
-        $userId = $_SESSION['user_id']; // Assuming user ID is stored in session
-        $user = $this->userService->getUserById($userId);
+        $userId = $_SESSION['user_id'];  // Assuming user_id is stored in session
+        $user = UserModel::getUserById($userId);
 
         if ($user) {
-            require 'views/profile.php'; // Show user profile view
+            echo "Email: " . $user['email'] . "<br>";
+            echo "National ID: " . $user['national_id'] . "<br>";
         } else {
-            // Handle user not found
-            $_SESSION['error'] = 'User not found.';
-            header('Location: /login');
-            exit();
+            echo "User not found.";
+        }
+    }
+
+    public function trackDonationHistory() {
+        $userId = $_SESSION['user_id'];  // Assuming user_id is stored in session
+
+        // Get donation history from UserModel
+        $donations = UserModel::trackDonationHistory($userId);
+
+        // Display the donation history
+        if (is_array($donations)) {
+            echo "Donation History for User ID $userId:<br>";
+            foreach ($donations as $donation) {
+                echo "Type: " . $donation['donation_type'] . ", Amount: " . $donation['amount'] . ", Date: " . $donation['date'] . "<br>";
+            }
+        } else {
+            echo $donations;  // If no history found, display the error message
         }
     }
 }
