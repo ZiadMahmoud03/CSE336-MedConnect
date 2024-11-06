@@ -130,18 +130,19 @@ run_queries(
             FOREIGN KEY (volunteer_id) REFERENCES VolunteerDetails(volunteer_id)
         );",
 
-        // Populate Address table
+            
         "INSERT INTO $configs->DB_NAME.$configs->DB_ADDRESS_TABLE (address_id, name, parent_id) VALUES 
-            (1, 'Cairo', NULL),                    -- Capital city
-            (2, 'Giza', 1),                        -- District of Cairo
-            (3, 'Heliopolis', 1),                  -- Neighborhood in Cairo
-            (4, 'Alexandria', NULL),               -- Major city
-            (5, 'Mansheya', 4),                    -- Neighborhood in Alexandria
-            (6, 'Sharm El-Sheikh', NULL),          -- Resort city
-            (7, 'Aswan', NULL),                    -- City in southern Egypt
-            (8, 'Luxor', 7),                       -- City near Aswan
-            (9, 'Hurghada', NULL),                 -- Resort town
-            (10, '6th of October City', 1);",     
+            (1, 'Egypt', 0),                    -- Parent node for all addresses
+            (2, 'Cairo', 1),                       -- Capital city of Egypt
+            (3, 'Giza', 1),                        -- District of Egypt
+            (4, 'Heliopolis', 2),                  -- Neighborhood in Cairo
+            (5, 'Alexandria', 1),                 -- Major city in Egypt
+            (6, 'Mansheya', 5),                    -- Neighborhood in Alexandria
+            (7, 'Sharm El-Sheikh', 1),            -- Resort city in Egypt
+            (8, 'Aswan', 1),                       -- City in southern Egypt
+            (9, 'Luxor', 8),                       -- City near Aswan
+            (10, 'Hurghada', 1),                    -- Resort town in Egypt
+            (11, '6th of October City', 2);",     
 
         // Populate Person table with passwords
         "INSERT INTO $configs->DB_NAME.$configs->DB_PERSON_TABLE (first_name, last_name, email, phone, password, address_id) VALUES 
