@@ -1,19 +1,46 @@
 <?php
-$configs = require "config.php";
-$conn = new mysqli($configs->DB_HOST, $configs->DB_USER);
+class Database
+{
+    private static $instance = null;
+    private $connection;
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    // Private constructor to prevent multiple instances
+    private function __construct()
+    {
+        $configs = require "config.php";
+        $this->connection = new mysqli(
+            $configs->DB_HOST, 
+            $configs->DB_USER, 
+            $configs->DB_PASS, 
+            $configs->DB_NAME
+        );
+
+        if ($this->connection->connect_error) {
+            die("Connection failed: " . $this->connection->connect_error);
+        }
+    }
+
+    // Public method to get the single instance
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new Database();
+        }
+        return self::$instance->connection;
+    }
+
+    // Optional: Prevent cloning and unserializing
+    private function __clone() {}
+    private function __wakeup() {}
 }
 
-echo "Connected successfully<br/><hr/>";
-
+// Updated run_queries function
 function run_queries($queries, $echo = false): array
 {
-    global $conn;
+    $conn = Database::getInstance();
     $ret = [];
     foreach ($queries as $query) {
-        $ret += [$conn->query($query)];
+        $ret[] = $conn->query($query);
         if ($echo) {
             echo '<pre>' . $query . '</pre>';
             echo $ret[array_key_last($ret)] === TRUE ? "Query ran successfully<br/>" : "Error: " . $conn->error;
@@ -23,14 +50,16 @@ function run_queries($queries, $echo = false): array
     return $ret;
 }
 
+// Updated run_query function
 function run_query($query, $echo = false): bool
 {
     return run_queries([$query], $echo)[0];
 }
 
+// Updated run_select_query function
 function run_select_query($query, $echo = false): mysqli_result|bool
 {
-    global $conn;
+    $conn = Database::getInstance();
     $result = $conn->query($query);
     if ($echo) {
         echo '<pre>' . $query . '</pre>';
@@ -44,5 +73,4 @@ function run_select_query($query, $echo = false): mysqli_result|bool
     }
     return $result;
 }
-
-// $conn->close();
+?>
