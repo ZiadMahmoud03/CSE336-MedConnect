@@ -10,7 +10,7 @@
 
     <div class="donation-form-container">
     <h2>Make a Donation</h2>
-    <form action="process_donation.php" method="post">
+    <form action="/donation" method="post">
     <label for="hospital">Select Hospital</label> 
     <select id="hospital"> 
     <option value="hospital1">Hospital 1</option>
