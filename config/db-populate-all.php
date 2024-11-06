@@ -10,7 +10,7 @@
             "CREATE DATABASE $configs->DB_NAME",
 
             "CREATE TABLE $configs->DB_NAME.$configs->DB_ADDRESS_TABLE (
-                address_id INT PRIMARY KEY AUTO_INCREMENT,
+                address_id INT PRIMARY KEY,
                 name VARCHAR(222) NOT NULL,
                 parent_id INT,
                 FOREIGN KEY (parent_id) REFERENCES Address(address_id) ON DELETE SET NULL
@@ -106,6 +106,10 @@
                 FOREIGN KEY (event_id) REFERENCES Event(event_id),
                 FOREIGN KEY (volunteer_id) REFERENCES VolunteerDetails(volunteer_id)
             );",
+
+
+            // Insert some sample data
+            "INSERT INTO $configs->DB_NAME.$configs->DB_ADDRESS_TABLE (name) VALUES ('Nairobi'), ('Mombasa'), ('Kisumu');",
 
 
         ]

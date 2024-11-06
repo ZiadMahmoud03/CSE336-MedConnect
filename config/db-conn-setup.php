@@ -29,9 +29,6 @@ class Database
         return self::$instance->connection;
     }
 
-    // Optional: Prevent cloning and unserializing
-    private function __clone() {}
-    private function __wakeup() {}
 }
 
 // Updated run_queries function
