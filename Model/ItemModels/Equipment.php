@@ -35,11 +35,11 @@ class Equipment extends Item {
         global $configs;
 
         // Fixing the variable reference here
-        $query = "SELECT `condition` FROM $configs->DB_NAME.Equipment WHERE equipment_id = $this->equipmentID";
+        $query = "SELECT `equipment_condition` FROM $configs->DB_NAME.Equipment WHERE equipment_id = $this->equipmentID";
         $result = run_select_query($query);
 
         if ($result && $row = $result->fetch_assoc()) {
-            $condition = $row['condition'];
+            $this->condition = $row['equipment_condition'];
             return $this->condition ?: "Condition not set";
         } else {
             return "Error retrieving condition"; 

@@ -75,7 +75,7 @@ run_queries(
         // Create Equipment table
         "CREATE TABLE $configs->DB_NAME.$configs->DB_EQUIPMENT_TABLE (
             equipment_id INT PRIMARY KEY AUTO_INCREMENT,
-            condition VARCHAR(255),
+            equipment_condition VARCHAR(255),
             item_id INT,
             FOREIGN KEY (item_id) REFERENCES Item(item_id)
         );",
@@ -193,7 +193,7 @@ run_queries(
             (5, '2024-11-25', 5);",
 
         // Populate Equipment table
-        "INSERT INTO $configs->DB_NAME.$configs->DB_EQUIPMENT_TABLE (equipment_id, condition, item_id) VALUES 
+        "INSERT INTO $configs->DB_NAME.$configs->DB_EQUIPMENT_TABLE (equipment_id, equipment_condition, item_id) VALUES 
             (1, Used, 1),
             (2, New, 2),
             (3, New, 3),
