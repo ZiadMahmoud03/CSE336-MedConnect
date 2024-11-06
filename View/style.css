@@ -1,0 +1,188 @@
+body
+{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/*-----------------------------------Registration Form------------------------*/
+.form-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    padding-bottom: 60px;
+    background: #eee;
+ }
+ 
+ .form-container form {
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    text-align: center;
+    width: 400px;
+}
+
+.form-container form label {
+    display: block; /* Make label a block element */
+    text-align: left; /* Align text to the left */
+    margin-bottom: 5px; /* Add some space below the label */
+}
+
+ 
+ .form-container form h2 {
+     font-size: 24px;
+     margin-bottom: 20px;
+     color: #333;
+ }
+ 
+ .form-container form input,
+ .form-container form select {
+     width: 100%;
+     padding: 12px 0 12px 8px;
+     font-size: 16px;
+     margin: 10px 0;
+     background: #f5f5f5;
+     border: 1px solid #ddd;
+     border-radius: 5px;
+ }
+ 
+ .form-container form button {
+     width: 100%;
+     padding: 12px;
+     font-size: 16px;
+     margin-top: 10px;
+     background: #d3d3d3;
+     border: none;
+     border-radius: 5px;
+     cursor: pointer;
+     color: #333;
+     transition: background 0.3s ease;
+ }
+ 
+ .form-container form button:hover {
+     background: #bfbfbf;
+ }
+ 
+ .form-container form p {
+     margin-top: 15px;
+     font-size: 14px;
+     color: #333;
+     text-align: center;
+ }
+ 
+ .form-container form p a {
+     color: #007bff;
+     text-decoration: none;
+     font-weight: bold;
+ }
+ 
+ .form-container form p a:hover {
+     text-decoration: underline;
+ }
+
+ .social-container {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Individual social icons */
+.social {
+    color: #fff;
+    font-size: 20px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+.social.facebook { background: #3b5998; }
+.social.google { background: #db4437; }
+
+.social:hover {
+    opacity: 0.8;
+}
+
+/* Fix for font alignment and size issues */
+.fab {
+    font-size: 20px;
+    line-height: 1;
+}
+
+
+ /*----------------------------------------------------------HomePage--------------------------------------------------------------------------*/
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Added this line */
+    background-color: #f8f9fa;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.navbar .logo img {
+    width: 250px; /* Changed this line */
+    margin-right: 10px; /* Adjusted value */
+    height: 40px;
+}
+
+.navbar .buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.navbar button {
+    padding: 10px 15px;
+    border: none;
+    color: black;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.navbar button:hover {
+    background-color: #0056b3;
+}
+
+.navbar .search-bar {
+    flex:0.9;
+    margin: 0 20px;
+}
+
+.navbar .search-bar input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.navbar .user-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.navbar .user-actions button {
+    padding: 10px 15px;
+    border: none;
+    color: black;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.navbar .user-actions button:hover {
+    background-color: #218838;
+}
+
+.navbar .fa-user 
+{ 
+    font-size: 20px; /* Set icon size */ 
+    vertical-align: middle; /* Ensure vertical alignment */ 
+    margin-top: 10px;
+}
