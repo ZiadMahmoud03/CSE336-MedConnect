@@ -11,7 +11,6 @@ abstract class Item {
         $this->quantityAvailable = $quantityAvailable;
     }
 
-    abstract public function checkAvailability();
+    abstract public function checkAvailability(); 
 }
 
-?>

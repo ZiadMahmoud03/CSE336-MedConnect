@@ -75,6 +75,7 @@ run_queries(
         // Create Equipment table
         "CREATE TABLE $configs->DB_NAME.$configs->DB_EQUIPMENT_TABLE (
             equipment_id INT PRIMARY KEY AUTO_INCREMENT,
+            condition VARCHAR(255),
             item_id INT,
             FOREIGN KEY (item_id) REFERENCES Item(item_id)
         );",
