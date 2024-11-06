@@ -4,8 +4,8 @@
         // Application configuration
         'SITE_NAME'     => "MedConnect",
         'APP_ROOT'      => dirname(dirname(__FILE__)),
-        'URL_ROOT'      => 'http://localhost/HOSPITALDONATIONS', // Adjust if hosted on a server or subfolder
-        'URL_SUBFOLDER' => '', // Leave empty if accessing directly as a folder
+        'URL_ROOT'      => 'http://localhost/HOSPITALDONATIONS', 
+        'URL_SUBFOLDER' => '',
 
         // Database configuration
         'DB_HOST' => 'localhost',
@@ -26,6 +26,7 @@
         'DB_EVENT_TABLE'=> 'Event',
         'DB_EVENT_DETAILS_TABLE'=> 'EventDetails',
         'DB_VOLUNTEER_DETAILS_TABLE'=> 'VolunteerDetails',
+        'DB_HOSPITAL_TABLE' => 'Hospital'
 
         // Routes can be defined here if needed
     );

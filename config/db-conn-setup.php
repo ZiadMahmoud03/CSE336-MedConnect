@@ -1,4 +1,6 @@
 <?php
+$configs = require "config.php"; // No need for global here
+
 class Database
 {
     private static $instance = null;
@@ -7,11 +9,12 @@ class Database
     // Private constructor to prevent multiple instances
     private function __construct()
     {
-        $configs = require "config.php";
+        global $configs; // Use global to access configs if needed
+
         $this->connection = new mysqli(
-            $configs->DB_HOST, 
-            $configs->DB_USER, 
-            $configs->DB_PASS, 
+            $configs->DB_HOST,
+            $configs->DB_USER,
+            $configs->DB_PASS,
             $configs->DB_NAME
         );
 
@@ -28,7 +31,6 @@ class Database
         }
         return self::$instance->connection;
     }
-
 }
 
 // Updated run_queries function
@@ -37,10 +39,11 @@ function run_queries($queries, $echo = false): array
     $conn = Database::getInstance();
     $ret = [];
     foreach ($queries as $query) {
-        $ret[] = $conn->query($query);
+        $result = $conn->query($query);
+        $ret[] = $result; // Store the result
         if ($echo) {
             echo '<pre>' . $query . '</pre>';
-            echo $ret[array_key_last($ret)] === TRUE ? "Query ran successfully<br/>" : "Error: " . $conn->error;
+            echo $result === TRUE ? "Query ran successfully<br/>" : "Error: " . $conn->error;
             echo "<hr/>";
         }
     }
@@ -61,8 +64,9 @@ function run_select_query($query, $echo = false): mysqli_result|bool
     if ($echo) {
         echo '<pre>' . $query . '</pre>';
         if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc())
-                echo $row;
+            while ($row = $result->fetch_assoc()) {
+                echo '<pre>' . print_r($row, true) . '</pre>'; // Use print_r for better formatting
+            }
         } else {
             echo "0 results";
         }

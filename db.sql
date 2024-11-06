@@ -1,5 +1,5 @@
 CREATE TABLE Address (
-    address_id INT PRIMARY KEY AUTO_INCREMENT,
+    address_id INT PRIMARY KEY,
     name VARCHAR(222) NOT NULL,
     parent_id INT,
     FOREIGN KEY (parent_id) REFERENCES Address(address_id) ON DELETE SET NULL
@@ -11,6 +11,7 @@ CREATE TABLE Person (
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     phone INT,
+    password VARCHAR(255) NOT NULL,  
     address_id INT,
     FOREIGN KEY (address_id) REFERENCES Address(address_id)
 );
@@ -28,11 +29,11 @@ CREATE TABLE User (
 -- HospitalAdmin table (inherits from Person)
 CREATE TABLE HospitalAdmin (
     admin_id INT PRIMARY KEY,
-    hospital_id INT,
     person_id INT,
-    FOREIGN KEY (person_id) REFERENCES Person(person_id)
+    hospital_id INT,  
+    FOREIGN KEY (person_id) REFERENCES Person(person_id),
+    FOREIGN KEY (hospital_id) REFERENCES Hospital(hospital_id)
 );
-
 -- Abstract Item table
 CREATE TABLE Item (
     item_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -106,3 +107,11 @@ CREATE TABLE EventDetails (
     FOREIGN KEY (event_id) REFERENCES Event(event_id),
     FOREIGN KEY (volunteer_id) REFERENCES VolunteerDetails(volunteer_id)
 );
+
+CREATE TABLE Hospital(
+    hospital_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    address_id INT,
+    phone VARCHAR(15),
+    FOREIGN KEY (address_id) REFERENCES Address(address_id) ON DELETE SET NULL
+)
