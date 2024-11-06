@@ -18,8 +18,7 @@
             <input type="password" name="password" placeholder=" Enter your password" required>
             <input type="hidden" name="login_type" valu="email">
             <button type="submit">Login</button>
-            <p>Don't have an account?</p>
-            <p><a href="RegisterDonor.php"> Register as Donor</a> or <a href="RegisterHospitalAdmin.php"> Register as Hospital Admin</a></p>
+            <p>Don't have an account? <a href="SignupView.php"> Register</a></p>
         </form>
         
     </div>
