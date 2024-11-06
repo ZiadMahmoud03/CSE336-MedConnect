@@ -6,7 +6,7 @@
     <title>Home Page</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/193fff84d2.js" crossorigin="anonymous"></script>
-    <script src="script.js" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
 </head>
 <body class="home">
     <div class="navbar">
@@ -14,15 +14,22 @@
             <img src="Images\Logo.png" alt="Logo">
         </div>
         <div class="buttons">
-            <button>Donate Money</button>
-            <button>Donate Items</button>
+        <a href="MoneyDonation.php"><button>Donate Money</button></a>
+        <a href="ItemDonation.php"><button>Donate Items</button></a>
         </div>
         <div class="search-bar">
             <input type="text" placeholder="Search...">
         </div>
         <div class="user-actions">
-            <button>Sign Up</button>
-            <button>Login</button>
+        <a href="Login.php"><button>Login</button></a>
+        <div class="dropdown">
+        <button class="dropdown-toggle" onclick="toggleDropdown()">Register</button>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="RegisterDonor.php">Donor</a>
+            <hr>
+            <a href="RegisterHospitalAdmin.php">Hospital Admin</a>
+        </div>
+        </div>
             <i class="fa-solid fa-user" style="color: #000000;"></i>
         </div>
     </div>
