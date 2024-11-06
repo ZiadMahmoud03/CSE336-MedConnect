@@ -1,69 +1,75 @@
 <?php
+require_once "./Services/Login/ILoginStrategy.php";
+require_once "./Services/Login/EmailLogin.php";
+require_once "./Services/Login/FacebookLogin.php";
+require_once "./Services/Login/GoogleLogin.php";
 
-echo"Login form goes here";
-class LoginController {
+class LoginController
+{
+    use Controller;
+
     private $loginStrategy;
 
-    // Method to set the login strategy dynamically
-    public function setLoginStrategy(ILoginStrategy $strategy) {
-        $this->loginStrategy = $strategy;
-    }
+    public function index()
+    {
+        $data = [];
 
-    // Main login method that uses the selected strategy
-    public function login() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $loginType = $_POST['login_type']; // e.g., 'email', 'google', 'facebook'
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            
             $userCredentials = [
-                'username' => $_POST['username'] ?? null,
-                'password' => $_POST['password'] ?? null,
-                'token' => $_POST['token'] ?? null,
+                'email' => $_POST['email'],
+                'password' => $_POST['password']
             ];
 
-            // Choose the strategy based on login type
-            switch ($loginType) {
-                case 'google':
-                    $this->setLoginStrategy(new GoogleLogin());
-                    break;
-                case 'email':
-                    $this->setLoginStrategy(new EmailLogin());
-                    break;
-                case 'facebook':
-                    $this->setLoginStrategy(new FacebookLogin());
-                    break;
-                default:
-                    $_SESSION['error'] = "Invalid login type.";
-                    header('Location: /login');
-                    exit();
-            }
-
             try {
-                // Authenticate using the chosen strategy
+                
+                switch ($_POST['login_type']) {
+                    case 'email':
+                        $this->loginStrategy = new EmailLogin();
+                        break;
+                    
+                    case 'facebook':
+                        $this->loginStrategy = new FacebookLogin();
+                        break;
+                    
+                    case 'google':
+                        $this->loginStrategy = new GoogleLogin();
+                        break;
+                    
+                    default:
+                        throw new Exception("Invalid login method");
+                }
+                
+                
                 $user = $this->loginStrategy->login($userCredentials);
 
-                // Start session and store user data on successful login
-                session_start();
+                // Set session variables after successful authentication
+                $_SESSION['USER'] = $user;
                 $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_type'] = $user['type']; // 'Donor' or 'Admin'
+                $_SESSION['user_type'] = $user['type'];  // Admin or Donor
 
-                // Redirect based on user type
-                if ($user['type'] === 'Admin') {
-                    header('Location: /admin/dashboard');
-                } else {
-                    header('Location: /donor/dashboard');
+                
+                switch ($_SESSION['user_type']) {
+                    case 'Donor':
+                        $this->view('donordashboard');  // Load the donor dashboard view directly
+                        break;
+
+                    case 'Admin':
+                        $this->view('admindashboard');  // Load the admin dashboard view directly
+                        break;
+
+                    default:
+                        throw new Exception("Unknown user type");
                 }
-                exit();
 
+                exit;  
             } catch (Exception $e) {
-                // Handle login failure
-                $_SESSION['error'] = $e->getMessage();
-                header('Location: /login');
-                exit();
+                error_log($e->getMessage());
+                $data['errors'] = ['email' => $e->getMessage()];
             }
         }
-    }
 
-    public function showLoginForm() {
-        require 'views/login.php';
+        // Load the login view, passing any errors
+        $this->view('login', $data);
     }
-    
 }
