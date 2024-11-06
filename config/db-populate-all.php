@@ -39,6 +39,15 @@ run_queries(
             FOREIGN KEY (person_id) REFERENCES Person(person_id)
         );",
 
+        // Create Hospital table
+        "CREATE TABLE $configs->DB_NAME.$configs->DB_HOSPITAL_TABLE (
+            hospital_id INT PRIMARY KEY AUTO_INCREMENT,
+            name VARCHAR(255) NOT NULL,
+            address_id INT,
+            phone VARCHAR(15),
+            FOREIGN KEY (address_id) REFERENCES Address(address_id) ON DELETE SET NULL
+        );",
+
         // Create HospitalAdmin table
         "CREATE TABLE $configs->DB_NAME.$configs->DB_HOSPITALADMIN_TABLE (
             admin_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -119,15 +128,6 @@ run_queries(
             attendance VARCHAR(255),
             FOREIGN KEY (event_id) REFERENCES Event(event_id),
             FOREIGN KEY (volunteer_id) REFERENCES VolunteerDetails(volunteer_id)
-        );",
-
-        // Create Hospital table
-        "CREATE TABLE $configs->DB_NAME.$configs->DB_HOSPITAL_TABLE (
-            hospital_id INT PRIMARY KEY AUTO_INCREMENT,
-            name VARCHAR(255) NOT NULL,
-            address_id INT,
-            phone VARCHAR(15),
-            FOREIGN KEY (address_id) REFERENCES Address(address_id) ON DELETE SET NULL
         );",
 
         // Populate Address table
