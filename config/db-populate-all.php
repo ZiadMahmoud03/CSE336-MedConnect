@@ -194,11 +194,11 @@ run_queries(
 
         // Populate Equipment table
         "INSERT INTO $configs->DB_NAME.$configs->DB_EQUIPMENT_TABLE (equipment_id, equipment_condition, item_id) VALUES 
-            (1, Used, 1),
-            (2, New, 2),
-            (3, New, 3),
-            (4, Used, 4),
-            (5, Used,5);",
+            (1, 'Used', 1),
+            (2, 'New', 2),
+            (3, 'New', 3),
+            (4, 'Used', 4),
+            (5, 'Used', 5);",
 
         // Populate Donation table
         "INSERT INTO $configs->DB_NAME.$configs->DB_DONATION_TABLE (donation_id, medicine_id, quantity, user_id) VALUES 
