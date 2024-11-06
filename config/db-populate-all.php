@@ -13,8 +13,7 @@ run_queries(
         "CREATE TABLE $configs->DB_NAME.$configs->DB_ADDRESS_TABLE (
             address_id INT PRIMARY KEY AUTO_INCREMENT,
             name VARCHAR(222) NOT NULL,
-            parent_id INT,
-            FOREIGN KEY (parent_id) REFERENCES Address(address_id) ON DELETE SET NULL
+            parent_id INT NOT NULL
         );",
 
         // Create Person table with password field
@@ -45,7 +44,7 @@ run_queries(
             name VARCHAR(255) NOT NULL,
             address_id INT,
             phone VARCHAR(15),
-            FOREIGN KEY (address_id) REFERENCES Address(address_id) ON DELETE SET NULL
+            FOREIGN KEY (address_id) REFERENCES Address(address_id) 
         );",
 
         // Create HospitalAdmin table
