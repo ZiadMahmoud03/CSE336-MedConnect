@@ -1,7 +1,10 @@
 body
 {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin:0;
 }
+
+
 
 /*-----------------------------------Registration Form------------------------*/
 .form-container {
@@ -123,6 +126,7 @@ body
     background-color: #f8f9fa;
     padding: 10px 20px;
     border-bottom: 1px solid #ddd;
+    margin:0;
 }
 
 .navbar .logo img {
@@ -187,3 +191,208 @@ body
 
  /*----------------------------------------------------------Homepage--------------------------------------------------------------------------*/
  
+ .slider-container * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+}
+
+.slider-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 35px;
+}
+
+.slider-container .wrapper {
+    max-width: 2000px;
+    width: 100%;
+    position: relative;
+}
+
+.slider-container .wrapper i {
+    height: 50px;
+    width: 50px;
+    color: #0056b3;
+    text-align: center;
+    line-height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    font-size: 2rem;
+    transform: translateY(-50%);
+}
+
+.slider-container .wrapper i:first-child {
+    left: -22px;
+}
+
+.slider-container .wrapper i:last-child {
+    right: -22px;
+}
+
+.slider-container .wrapper .carousel {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% / 4) - 12px); 
+    gap: 15px;
+    margin-left: 22px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+
+.slider-container .carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.slider-container .carousel :where(.card, .img) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slider-container .carousel.dragging {
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+}
+
+.slider-container .carousel.no-transition {
+    scroll-behavior: auto;
+}
+
+.slider-container .carousel.dragging .card {
+    cursor: grab;
+    user-select: none;
+}
+
+.slider-container .carousel .card {
+    scroll-snap-align: start;
+    height: 250px; 
+    list-style: none;
+    background: #fff;
+    border-radius: 8px;
+    display: flex;
+    cursor: pointer;
+    width: 93%;
+    padding-bottom: 15px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+
+.slider-container .card .img {
+    width: 140px;
+    height: 140px;
+}
+
+.slider-container .card .img img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border: 4px solid #fff;
+}
+
+.slider-container .card h2 {
+    font-weight: 500;
+    font-size: 1.56rem;
+    margin: 20px 0 5px 10px;
+}
+
+.slider-container .card span {
+    color: #6a6d78;
+    font-size: 1.31rem;
+}
+
+@media screen and (max-width: 900px) {
+    .slider-container .wrapper .carousel {
+        grid-auto-columns: calc((100% / 3) - 9px); 
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .slider-container .wrapper .carousel {
+        grid-auto-columns: 100%; 
+    }
+}
+
+/*----------------------------------------------------------Footer--------------------------------------------------------------------------*/
+.footer 
+{
+    background-color: #f8f9fa;
+    padding: 40px 20px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 220px;
+    margin: 10px;
+}
+
+.footer-section h4 {
+    margin-bottom: 10px;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.footer-section p,
+.footer-section ul {
+    font-size: 1rem;
+    color: #6a6d78;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.footer-section ul li {
+    margin: 5px 0;
+}
+
+.footer-section ul li a {
+    text-decoration: none;
+    color: #007bff;
+    transition: color 0.3s;
+}
+
+.footer-section ul li a:hover {
+    color: #0056b3;
+}
+
+
+.footer-bottom {
+    margin-top: 30px;
+    font-size: 0.875rem;
+    color: #6a6d78;
+}
+
+.footer-bottom p {
+    margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-section {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+}
