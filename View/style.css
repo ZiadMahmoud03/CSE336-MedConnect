@@ -438,3 +438,72 @@ h2{
         margin-bottom: 20px;
     }
 }
+
+/*----------------------------------------------------------MoneyDonation--------------------------------------------------------------------------*/
+.donation-form-container {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+.donation-form-container h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #333;
+    text-align: center;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+.donation-form-container label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.donation-form-container input[type="number"],
+.donation-form-container select,
+.donation-form-container button {
+    width: 100%; 
+    padding: 12px 15px;
+    margin-top: 10px;
+    margin-bottom:10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    color: #333;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+}
+
+.donation-form-container input[type="number"],
+.donation-form-container select {
+    background-color: #f9f9f9;
+}
+
+.donation-form-container input[type="number"]:focus,
+.donation-form-container select:focus {
+    border-color: #007bff;
+    background-color: #ffffff;
+    outline: none;
+}
+
+.donation-form-container button {
+    background-color: #d3d3d3;
+    color: #333;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.donation-form-container button:hover {
+    background-color: #bfbfbf;
+}
