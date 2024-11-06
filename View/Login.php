@@ -12,10 +12,11 @@
 </head>
 <body>
     <div class="form-container">
-        <form action="index.php?action=login" method="post">
+        <form action="/login" method="post">
         <h2>LOGIN</h2>
             <input type="text" name="email" placeholder=" Enter your email" required>
             <input type="password" name="password" placeholder=" Enter your password" required>
+            <input type="hidden" name="login_type" valu="email">
             <button type="submit">Login</button>
             <p>Don't have an account?</p>
             <p><a href="RegisterDonor.php"> Register as Donor</a> or <a href="RegisterHospitalAdmin.php"> Register as Hospital Admin</a></p>
