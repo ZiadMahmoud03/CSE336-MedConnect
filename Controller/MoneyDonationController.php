@@ -1,4 +1,5 @@
 <?php
+
 class MoneyDonationController {
     private $paymentStrategy;
     private $paymentId;
@@ -7,7 +8,7 @@ class MoneyDonationController {
     private $paymentMethod;
 
     
-    public function setPaymentStrategy(IPaymentStrategy $strategy) {
+    public function setPaymentStrategy(IMoneyDonationStrategy $strategy) {
         $this->paymentStrategy = $strategy;
     }
 
