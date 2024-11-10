@@ -1,7 +1,7 @@
 <?php
 class App {
 
-private $controller = 'BaseViewController';  // Default controller
+private $controller = 'HomeController';  // Default controller
 private $method = 'index';     // Default method
 private $params = [];          // Parameters for method
 
@@ -15,7 +15,7 @@ public function loadController() {
     $segments = $this->split_url();
 
     // Set default controller to "BaseViewController" if no controller is specified
-    $controllerName = !empty($segments[0]) ? ucfirst($segments[0]) . "Controller" : "BaseViewController";
+    $controllerName = !empty($segments[0]) ? ucfirst($segments[0]) . "Controller" : "HomeController";
 
     // Check if controller exists
     $filename = "Controller/" . $controllerName . ".php";
