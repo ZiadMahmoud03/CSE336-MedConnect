@@ -1,53 +1,53 @@
 <?php
-class App {
+class App
+{
+	private $controller = 'Home';
+	private $method 	= 'index';
 
-private $controller = 'HomeController';  // Default controller
-private $method = 'index';     // Default method
-private $params = [];          // Parameters for method
+	private function splitURL()
+	{
+		$URL = $_GET['url'] ?? 'home';
+		$URL = explode("/", trim($URL,"/"));
+		return $URL;	
+	}
 
-private function split_url() {
-    $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    $segments = explode('/', trim($path, '/'));
-    return $segments;
+	public function loadController()
+	{
+		$URL = $this->splitURL();
+
+		/** select controller **/
+        $controllerName = ucfirst($URL[0]). 'Controller';
+		$filename = "Controller/". $controllerName.".php";
+		if(file_exists($filename))
+		{
+			require $filename;
+			$this->controller = $controllerName;
+			unset($URL[0]);
+		}else{
+
+			// $filename = "../app/controllers/_404.php";
+			// require $filename;
+			// $this->controller = "_404";
+            echo "404 Controller not found";
+            return;
+		}
+
+		$controller = new $this->controller;
+
+		/** select method **/
+		if(!empty($URL[1]))
+		{
+			if(method_exists($controller, $URL[1]))
+			{
+				$this->method = $URL[1];
+				unset($URL[1]);
+			}	
+		}
+
+		call_user_func_array([$controller,$this->method], $URL);
+
+	}	
+
 }
 
-public function loadController() {
-    $segments = $this->split_url();
 
-    // Set default controller to "BaseViewController" if no controller is specified
-    $controllerName = !empty($segments[0]) ? ucfirst($segments[0]) . "Controller" : "HomeController";
-
-    // Check if controller exists
-    $filename = "Controller/" . $controllerName . ".php";
-    if (file_exists($filename)) {
-        require_once $filename;
-        $this->controller = $controllerName;
-    } else {
-        echo "404 Controller not found";
-        return;
-    }
-
-    // Instantiate the controller
-    if (class_exists($this->controller)) {
-        $controller = new $this->controller;
-
-        // Check if a method is specified and exists
-        if (!empty($segments[1])) {
-            $this->method = $segments[1];
-            array_shift($segments); // Remove method from segments
-        }
-
-        // If there are more than two segments, the rest are considered parameters
-        $this->params = !empty($segments) ? $segments : [];
-
-        // Call the method dynamically with parameters
-        if (method_exists($controller, $this->method)) {
-            call_user_func_array([$controller, $this->method], $this->params);
-        } else {
-            echo "404 Method not found";
-        }
-    } else {
-        echo "404 Controller class not found";
-    }
-}
-}
