@@ -5,18 +5,18 @@ require_once "config/db-conn-setup.php";
 ob_end_clean();
 
 class Medicine extends Item {
+
     private string $expiryDate;
     private int $medicineID;
 
-    public function __construct(int $medicineID, int $itemID, string $name, int $quantityAvailable, string $expiryDate) {
-        parent::__construct($itemID, $name, $quantityAvailable);
-        
-        // Validate expiry date format
-        if (!$this->isValidDate($expiryDate)) {
-            throw new InvalidArgumentException("Invalid expiry date format. Expected Y-m-d format.");
-        }
-        
-        $this->expiryDate = $expiryDate;
+    public function __construct(int $medicineID, int $itemID, string $name, int $quantityAvailable, string $expiryDate, string $description) { 
+        parent::__construct($itemID, $name, $quantityAvailable, $description); 
+        // Pass the description to the parent constructor 
+        // Validate expiry date format 
+        if (!$this->isValidDate($expiryDate)) { 
+            throw new InvalidArgumentException("Invalid expiry date format. Expected Y-m-d format."); 
+        } 
+        $this->expiryDate = $expiryDate; 
         $this->medicineID = $medicineID;
     }
 
@@ -101,6 +101,33 @@ class Medicine extends Item {
         }
     }
 
+    public function getDescription(): string {
+        global $configs;
+    
+        try {
+            // SQL query to fetch the description from the database
+            $query = "SELECT i.description 
+                      FROM {$configs->DB_NAME}.Item i 
+                      JOIN {$configs->DB_NAME}.Medicine m ON i.item_id = m.item_id 
+                      WHERE m.medicine_id = ?";
+    
+            $stmt = $configs->conn->prepare($query);
+            $stmt->bind_param("i", $this->medicineID);
+            $stmt->execute();
+            $result = $stmt->get_result();
+    
+            if ($result && $row = $result->fetch_assoc()) {
+                return $row['description'] ?: "No description available.";
+            }
+    
+            return "Description not found.";
+        } catch (mysqli_sql_exception $e) {
+            error_log("Database error in getDescription: " . $e->getMessage());
+            throw new Exception("Error fetching medicine description");
+        }
+    }
+    
+
     // Helper method to validate date format
     private function isValidDate(string $date): bool {
         $datetime = DateTime::createFromFormat('Y-m-d', $date);
@@ -125,3 +152,5 @@ class Medicine extends Item {
         return $daysRemaining > 0 && $daysRemaining <= $thresholdDays;
     }
 }
+
+

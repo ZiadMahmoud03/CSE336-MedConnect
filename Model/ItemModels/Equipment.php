@@ -8,11 +8,12 @@ class Equipment extends Item {
     private string $condition;
     private int $equipmentID;
 
-    public function __construct(int $equipmentID, int $itemID, string $name, int $quantityAvailable, string $condition) {
-        parent::__construct($itemID, $name, $quantityAvailable);
+    public function __construct(int $equipmentID, int $itemID, string $name, int $quantityAvailable, string $condition, string $description) {
+        parent::__construct($itemID, $name, $quantityAvailable, $description);
         $this->condition = $condition;
         $this->equipmentID = $equipmentID;
     }
+    
 
     public function checkAvailability(): bool {
         global $configs;
@@ -60,6 +61,32 @@ class Equipment extends Item {
         } catch (mysqli_sql_exception $e) {
             error_log("Database error in checkCondition: " . $e->getMessage());
             throw new Exception("Error checking equipment condition");
+        }
+    }
+
+    public function getDescription(): string {
+        global $configs;
+        
+        try {
+            // SQL query to fetch the description from the database
+            $query = "SELECT i.description 
+                      FROM {$configs->DB_NAME}.Item i 
+                      JOIN {$configs->DB_NAME}.Equipment e ON i.item_id = e.item_id 
+                      WHERE e.equipment_id = ?";
+                      
+            $stmt = $configs->conn->prepare($query);
+            $stmt->bind_param("i", $this->equipmentID);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result && $row = $result->fetch_assoc()) {
+                return $row['description'] ?: "No description available.";
+            }
+
+            return "Description not found.";
+        } catch (mysqli_sql_exception $e) {
+            error_log("Database error in getDescription: " . $e->getMessage());
+            throw new Exception("Error fetching equipment description");
         }
     }
 
