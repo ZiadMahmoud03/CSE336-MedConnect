@@ -6,19 +6,28 @@ ob_end_clean();
 
 class Medicine extends Item {
 
-    private string $expiryDate;
-    private int $medicineID;
+    private ?string $expiryDate;
+    private ?int $medicineID;
 
-    public function __construct(int $medicineID, int $itemID, string $name, int $quantityAvailable, string $expiryDate, string $description) { 
-        parent::__construct($itemID, $name, $quantityAvailable, $description); 
-        // Pass the description to the parent constructor 
-        // Validate expiry date format 
-        if (!$this->isValidDate($expiryDate)) { 
+    public function __construct(
+        ?int $medicineID = null, 
+        ?int $itemID = null, 
+        ?string $name = null, 
+        ?int $quantityAvailable = null, 
+        ?string $expiryDate = null, 
+        ?string $description = null
+    ) { 
+        parent::__construct($itemID ?? 0, $name ?? "", $quantityAvailable ?? 0, $description ?? "");
+    
+        // Validate and set expiryDate
+        if ($expiryDate !== null && !$this->isValidDate($expiryDate)) { 
             throw new InvalidArgumentException("Invalid expiry date format. Expected Y-m-d format."); 
         } 
-        $this->expiryDate = $expiryDate; 
-        $this->medicineID = $medicineID;
+        $this->expiryDate = $expiryDate;
+    
+        $this->medicineID = $medicineID ?? 0; 
     }
+    
 
     public function checkAvailability(): bool {
         global $configs;

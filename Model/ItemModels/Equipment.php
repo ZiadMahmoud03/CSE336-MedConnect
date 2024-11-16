@@ -5,13 +5,19 @@ require_once "config/db-conn-setup.php";
 ob_end_clean();
 
 class Equipment extends Item {
-    private string $condition;
-    private int $equipmentID;
+    private ?string $condition;
+    private ?int $equipmentID;
 
-    public function __construct(int $equipmentID, int $itemID, string $name, int $quantityAvailable, string $condition, string $description) {
-        parent::__construct($itemID, $name, $quantityAvailable, $description);
-        $this->condition = $condition;
-        $this->equipmentID = $equipmentID;
+    public function __construct( 
+        ?int $equipmentID = null, 
+        ?int $itemID = null, ?string $name = null, 
+        ?int $quantityAvailable = null, 
+        ?string $condition = null, 
+        ?string $description = null 
+    ) { 
+        parent::__construct($itemID ?? 0, $name ?? "", $quantityAvailable ?? 0, $description ?? ""); 
+        $this->condition = $condition ?? ""; 
+        $this->equipmentID = $equipmentID ?? 0; 
     }
     
 
