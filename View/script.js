@@ -1,7 +1,46 @@
-/*-----------------------------------------------------------------Registration Form---------------------------------------------------------*/
+/*-----------------------------------------------------------------Donation History Filter---------------------------------------------------------*/
 
+document.getElementById('filter-type').addEventListener('change', function() {
+    const filterType = this.value;
+    const filterDateContainer = document.getElementById('filter-date-container');
+    const filterHospitalContainer = document.getElementById('filter-hospital-container');
 
+    if (filterType === 'date') {
+        filterDateContainer.style.display = 'block';
+        filterHospitalContainer.style.display = 'none';
+    } else {
+        filterDateContainer.style.display = 'none';
+        filterHospitalContainer.style.display = 'block';
+    }
+});
 
+document.getElementById('filter-button').addEventListener('click', function() {
+    const filterType = document.getElementById('filter-type').value;
+    const filterDate = document.getElementById('filter-date').value;
+    const filterHospital = document.getElementById('filter-hospital').value;
+
+    let donations = [
+        { date: '2022-01-02', amount: 100, hospital: 'Hospital 1' },
+        { date: '2022-05-15', amount: 200, hospital: 'Hospital 3' },
+        { date: '2022-07-23', amount: 50, hospital: 'Hospital 2' },
+    ];
+
+    let filteredDonations = donations.filter(donation => {
+        if (filterType === 'date') {
+            return donation.date === filterDate;
+        } else {
+            return donation.hospital === filterHospital;
+        }
+    });
+
+    const donationList = document.getElementById('donation-list');
+    donationList.innerHTML = '';
+    filteredDonations.forEach(donation => {
+        const li = document.createElement('li');
+        li.textContent = `${donation.date} - $${donation.amount} to ${donation.hospital}`;
+        donationList.appendChild(li);
+    });
+});
 
 /*-----------------------------------------------------------------Sliders---------------------------------------------------------*/
 document.addEventListener("DOMContentLoaded", function() {
