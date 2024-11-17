@@ -1,8 +1,8 @@
 <?php
 
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
-class DonationController {
+ini_set('display_errors', value: 1);
+class ItemDonationController {
     
     use Controller;
 
@@ -56,7 +56,7 @@ class DonationController {
 }
 
 $donationDetails = array();
-$donationController = new DonationController();
+$donationController = new ItemDonationController();
 
 // Create a donation for equipment
 $donationController->createDonation("Equipment", "Donating medical equipment for surgeries", $donationDetails);

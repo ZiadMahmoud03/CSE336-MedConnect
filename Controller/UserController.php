@@ -1,98 +1,22 @@
 <?php
 
-
-
-class UserModel {
-    
-        // Static array to simulate a database of users
-        private static $users = [
-            1 => ['email' => '', 'password' => 'hashedpassword1', 'national_id' => '123456789'],
-            2 => ['email' => 'jane@example.com', 'password' => 'hashedpassword2', 'national_id' => '987654321']
-        ];
-        private static $donationHistory = [
-            1 => [
-                ['donation_type' => 'medicine', 'amount' => 100, 'date' => '2024-01-10'],
-                ['donation_type' => 'equipment', 'amount' => 50, 'date' => '2024-02-15']
-            ],
-            2 => [
-                ['donation_type' => 'money', 'amount' => 200, 'date' => '2024-03-05']
-            ]
-        ];
-        // Register a new user
-        public static function register($email, $password, $nationalId) {
-            // Check if the email already exists
-            foreach (self::$users as $user) {
-                if ($user['email'] === $email) {
-                    return false; // Email is already taken
-                }
-            }
-    
-            // Add a new user with a simulated ID
-            $newUserId = count(self::$users) + 1;
-            self::$users[$newUserId] = [
-                'email' => $email,
-                'password' => password_hash($password, PASSWORD_BCRYPT),
-                'national_id' => $nationalId
-            ];
-    
-            return true; // User registered successfully
-        }
-    
-        // Update user profile by ID
-        public static function updateProfile($userId, $email, $nationalId) {
-            // Check if user exists
-            if (!isset(self::$users[$userId])) {
-                return false; // User not found
-            }
-    
-            // Update user data
-            self::$users[$userId]['email'] = $email;
-            self::$users[$userId]['national_id'] = $nationalId;
-    
-            return true; // Profile updated successfully
-        }
-    
-        // Get user by ID
-        public static function getUserById($userId) {
-            // Return user if exists, otherwise return null
-            return isset(self::$users[$userId]) ? self::$users[$userId] : null;
-        }
-    
-        // Delete a user profile by ID
-        public static function deleteProfile($userId) {
-            // Check if user exists
-            if (!isset(self::$users[$userId])) {
-                return false; // User not found
-            }
-    
-            // Remove user
-            unset(self::$users[$userId]);
-    
-            return true; // Profile deleted successfully
-        }
-        public static function trackDonationHistory($userId) {
-            // Check if the user exists
-            if (isset(self::$donationHistory[$userId])) {
-                return self::$donationHistory[$userId];
-            } else {
-                return "No donation history found for this user.";
-            }
-        }
-}
-
-
+//require_once "Model/UserModels/User.php";
 
 class UserController {
-
+    use Controller;
     // Register new user
+    public function index(){}
     public function register() {
+        $this->view("signup");
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'];
             $password = $_POST['password'];
+            $con_password = $_POST['con_password'];
             $nationalId = $_POST['national_id'];
 
+
             // Use UserModel to register user
-            $user = UserModel::register($email, $password, $nationalId);
+            $user = UserModel::createAccount($email, $password, $nationalId);
 
             if ($user) {
                 // Registration successful
@@ -103,13 +27,13 @@ class UserController {
             }
         }
 
-        // Show registration form (just for testing purposes)
-        echo '<form method="POST">
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <input type="text" name="national_id" placeholder="National ID" required>
-                <button type="submit">Register</button>
-              </form>';
+        // // Show registration form (just for testing purposes)
+        // echo '<form method="POST">
+        //         <input type="email" name="email" placeholder="Email" required>
+        //         <input type="password" name="password" placeholder="Password" required>
+        //         <input type="text" name="national_id" placeholder="National ID" required>
+        //         <button type="submit">Register</button>
+        //       </form>';
     }
 
     // Update user profile
