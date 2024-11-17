@@ -43,7 +43,45 @@ document.getElementById('filter-button').addEventListener('click', function() {
 });
 
 /*-----------------------------------------------------------------Sliders---------------------------------------------------------*/
-const cardData = [
+// Define the sliding functions globally
+function slideLeft(event) {
+    // Find the wrapper that contains the clicked button
+    const wrapper = event.currentTarget.closest('.wrapper');
+    // Find the carousel within this specific wrapper
+    const carousel = wrapper.querySelector('.carousel');
+    carousel.scrollBy({
+        left: -200,
+        behavior: 'smooth'
+    });
+}
+
+function slideRight(event) {
+    // Find the wrapper that contains the clicked button
+    const wrapper = event.currentTarget.closest('.wrapper');
+    // Find the carousel within this specific wrapper
+    const carousel = wrapper.querySelector('.carousel');
+    carousel.scrollBy({
+        left: 200,
+        behavior: 'smooth'
+    });
+}
+
+// Add event listeners when the document loads
+document.addEventListener('DOMContentLoaded', function() {
+    const prevButtons = document.querySelectorAll(".prev-btn");
+    const nextButtons = document.querySelectorAll(".next-btn");
+
+    // Add click listeners to all prev buttons
+    prevButtons.forEach(btn => {
+        btn.onclick = slideLeft;
+    });
+
+    // Add click listeners to all next buttons
+    nextButtons.forEach(btn => {
+        btn.onclick = slideRight;
+    });
+});
+/*const cardData = [
     {
         imgSrc: "Images/kisspng-57357-hospital-dar-al-fouad-cancer-child-5b3e67bbbbbc02.222815191530816443769.jpg",
         title: "Hello 1"
@@ -92,4 +130,19 @@ function slideLeft() {
 
 function slideRight() {
     carouselWrapper.scrollLeft += cardWidth * 3;
-}
+}*/
+
+/*-------------------------------------------------Login/Register Buttons------------------------------------------------*/
+
+// Select login and register buttons
+const loginButton = document.getElementById('login-button');
+const registerButton = document.getElementById('register-button');
+const authButtons = document.getElementById('auth-buttons');
+
+// Add event listeners to both buttons
+[loginButton, registerButton].forEach(button => {
+    button.addEventListener('click', () => {
+        // Hide the auth buttons container
+        authButtons.style.display = 'none';
+    });
+});
