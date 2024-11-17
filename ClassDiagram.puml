@@ -48,6 +48,7 @@ package "Model" {
 
     class HospitalAdmin extends Person {
         -hospitalID: int
+        -admin_id: int 
         +uploadRequiredItems()
         +notifyExpiringMedicine()
         +manageItems()

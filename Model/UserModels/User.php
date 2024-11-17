@@ -1,6 +1,7 @@
 <?php
 require_once "config/db-conn-setup.php";  
 require_once "Address.php";  
+require_once "Person.php";
 
 class User extends Person {
     private ?int $userID;
@@ -84,10 +85,10 @@ class User extends Person {
         return $stmt->execute();
     }
 
-    public function createAccount(string $email, string $password, string $name, string $phone, Address $address): bool {
+    public function createAccount(string $email, string $password, string $firstName, string $lastName, string $phone, Address $address): bool {
         $db = Database::getInstance();
 
-        $stmt = $db->prepare("INSERT INTO Person (name, email, phone, password, address_id) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $db->prepare("INSERT INTO Person (firstName,lastName, email, phone, password, address_id) VALUES (?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssi", $name, $email, $phone, $password, $address->getAddressID());
 
         return $stmt->execute();
@@ -137,7 +138,7 @@ class User extends Person {
                 $this->name = $user['name'];
                 $this->email = $user['email'];
                 $this->phone = $user['phone'];
-                
+
                 $this->address = new Address($user['address_id']); 
                 return true; // Authentication successful
             }
