@@ -18,7 +18,7 @@
         <a href="<?=URL_ROOT?>/itemdonation"><button>Donate Items</button></a>
         </div>
         <div class="search-bar">
-            <input type="text" placeholder="Search...">
+            <input type="text" placeholder="Search">
         </div>
         <div class="user-actions">
         <a href="<?=URL_ROOT?>/login"><button>Login</button></a>
@@ -26,55 +26,81 @@
         <a href="<?=URL_ROOT?>/donordashboard"><i class="fa-solid fa-user" style="color: #000000;"></i></a>
         </div>
     </div>
+
+    <div class="filter-container">
+        <select id="itemTypeFilter">
+            <option value="">Filter by Item Type</option>
+            <option value="equipment">Equipment</option>
+            <option value="medicine">Medicine</option>
+        </select>
+        <select id="hospitalFilter">
+            <option value="">Filter by Hospital</option>
+            <option value="hospital1">57357</option>
+            <option value="hospital2">Al-Nas Burn Hospital</option>
+            <option value="hospital2">Magdi Yacoub</option>
+        </select>
+        <select id="urgencyFilter">
+            <option value="">Filter by Urgency</option>
+            <option value="urgent">High</option>
+            <option value="non-urgent">Medium</option>
+            <option value="non-urgent">Low/option>
+        </select>
+        <select id="recentFilter">
+            <option value="">Filter by Recent</option>
+            <option value="lastWeek">Today</option>
+            <option value="lastWeek">Last Week</option>
+            <option value="lastMonth">Last Month</option>
+        </select>
+    </div>
     
     <h2>Equipment</h2>
     <div class="slider-container">
         <div class="wrapper">
             <!-- Left button -->
-            <i class="prev-btn fas fa-angle-left" onclick="slideLeft()"></i>
+            <i class="prev-btn fas fa-angle-left" onclick="slideLeft(event)"></i>
 
             <!-- Carousel container -->
             <ul class="carousel">
                 <li class="card">
                     <div class="img">
-                        <img src="Images\kisspng-57357-hospital-dar-al-fouad-cancer-child-5b3e67bbbbbc02.222815191530816443769.jpg" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/nebulizer.jpg" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Nebulizer</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/drive-medical-independent-living-rtl10402-64_600.avif" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Crutches</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/H409080bd3b154374beeff2edb0fdd83c8.jpg_300x300.avif" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Hospital Bed</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/91kIVwRYUpL._AC_SL1500_.jpg" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Wheelchair</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/nidek-aurus-50-cardiac-monitor.webp" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Heart Monitor</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/61xAPcJSFTS.jpg" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Surgical Equipment</h4>
                 </li>
             </ul>
 
             <!-- Right button -->
-            <i class="next-btn fas fa-angle-right" onclick="slideRight()"></i>
+            <i class="next-btn fas fa-angle-right" onclick="slideRight(event)"></i>
         </div>
     </div>
     
@@ -82,50 +108,50 @@
     <div class="slider-container">
         <div class="wrapper">
             <!-- Left button -->
-            <i class="prev-btn fas fa-angle-left" onclick="slideLeft()"></i>
+            <i class="prev-btn fas fa-angle-left" onclick="slideLeft(event)"></i>
 
             <!-- Carousel container -->
             <ul class="carousel">
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/https___cloudfront-us-east-2.images.arcpublishing.com_reuters_SQ4LJZ4KYVM7VOH6YA6YDKMVOI.avif" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Lumakras</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/LGMSH5CKNNO3TENSD3QSN6FNOQ.jpg" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Enhertu</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/leqvio-inclisiran-284-mg-injection.jpg" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Leqvio</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/Pfizer_tafamidis_meglumine_Vyndaqel_box .webp" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Vyndaqel</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/08339.webp" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Glucophage</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/Empadon-25mg-Tab.jpg" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Empadon</h4>
                 </li>
             </ul>
 
             <!-- Right button -->
-            <i class="next-btn fas fa-angle-right" onclick="slideRight()"></i>
+            <i class="next-btn fas fa-angle-right" onclick="slideRight(event)"></i>
         </div>
     </div> 
 
