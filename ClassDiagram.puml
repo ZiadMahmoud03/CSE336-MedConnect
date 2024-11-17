@@ -116,25 +116,22 @@ package "Model" {
     class DonationDetails {
         -donationDetailsID: int
         -donationID: int
-        -medicineID: int
-        -equipmentID: int
+        -type: string
+        -itemID: int
         -quantity: int
+        -unitPrice: float
+        -timeStamp: string
+        -status: string
         +getDetails()
     }
 
     class BasicDonation implements Donate {
         -donationID: int
-        -medicineID: int
-        -quantity: int
+        -userID: int
+        -amount: float
         -urgency_level: UrgencyLevel
         +makeDonation()
         +calculateImpact()
-    }
-
-    enum UrgencyLevel {
-        Low
-        Medium
-        High
     }
 
    class Payment {
@@ -142,13 +139,6 @@ package "Model" {
         -type: Type
         -amount: int
         +makePayment()
-    }
-
-    enum Type {
-        creditcard
-        debitcard
-        paypal
-        otheronline
     }
 
     class PaymentDetails {
@@ -348,7 +338,15 @@ package "Services" {
         +pay(moneydonationDetails)
     }
 
-    class OnlineMoneyDonation implements MoneyDonationStrategy {
+    class CreditCardMoneyDonation implements MoneyDonationStrategy {
+        +pay(moneydonationDetails)
+    }
+
+    class DebitCardMoneyDonation implements MoneyDonationStrategy {
+        +pay(moneydonationDetails)
+    }
+
+    class PaypalMoneyDonation implements MoneyDonationStrategy {
         +pay(moneydonationDetails)
     }
 
@@ -458,8 +456,6 @@ HospitalAdminDashboardView --> UserController
 FilterResultsView --> DonationFilterController
 EventView --> EventController
 DonationView --> DonationController
-BasicDonation --> UrgencyLevel : uses
-Payment --> Type : uses
 User *-- Payment
 BasicDonation *-- Payment
 PaymentDetails *-- Payment
