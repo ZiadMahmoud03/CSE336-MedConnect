@@ -1,13 +1,17 @@
 <?php
 
 class MoneyDonationController {
+
+    use Controller;
     private $paymentStrategy;
     private $paymentId;
     private $amount;
     private $date;
     private $paymentMethod;
 
-    
+    public function index(){
+        $this->view("MoneyDonation");
+    }
     public function setPaymentStrategy(IMoneyDonationStrategy $strategy) {
         $this->paymentStrategy = $strategy;
     }
