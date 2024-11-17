@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="form-container">
-        <form action="/register" method="post" id="registrationForm">
+        <form action="<?=URL_ROOT?>/user/register" method="post" id="registrationForm">
         <h2>REGISTER</h2>
         <div class="social-container">
                     <a href="#" class="social facebook"><i class="fab fa-facebook-f"></i></a>
@@ -19,11 +19,11 @@
             </div>
                 <span>Or use your email for registration</span>
                 <div class="name-fields">
-                <input type="text" name="first-name" placeholder="Enter your first name" required>
-                <input type="text" name="last-name" placeholder="Enter your last name" required>
+                <input type="text" name="first_name" placeholder="Enter your first name" required>
+                <input type="text" name="last_name" placeholder="Enter your last name" required>
                </div>
             <input type="text" name="email" placeholder=" Enter your email" required>
-            <input type="text" name="phone" placeholder=" Enter your phone number" required>
+            <input type="text" name="phone_number" placeholder=" Enter your phone number" required>
             <!----<select id="region" name="region" required>
                 <option value="" disabled selected>Select your region</option>
                 <option value="">Giza</option>
@@ -36,9 +36,9 @@
                 <option value="">Luxor</option>
                 <option value="">Hurghada</option>
             </select>---->
-            <input type="text" name="nationalid" placeholder=" Enter your national ID" required>
+            <input type="text" name="national_id" placeholder=" Enter your national ID" required>
             <input type="password" name="password" placeholder=" Enter your password" required>
-            <input type="password" name="conpassword" placeholder=" Confirm your password" required>
+            <input type="password" name="con_password" placeholder=" Confirm your password" required>
             <button type="submit">Register</button>
             <p>Already have an account?<a href="<?=URL_ROOT?>/login"> Login</a></p>
         </form>

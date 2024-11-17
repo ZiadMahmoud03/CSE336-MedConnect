@@ -1,7 +1,6 @@
 <?php
 
-//require_once "Model/UserModels/User.php";
-
+require_once "Model/UserModels/User.php";
 class EmailLogin implements ILoginStrategy {
     private $userModel;
 
