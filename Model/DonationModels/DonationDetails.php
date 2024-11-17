@@ -1,4 +1,9 @@
 <?php
+ob_start();  
+
+require_once "config/db-conn-setup.php";  
+
+ob_end_clean();  
 
 class DonationDetails {
     private int $donationDetailsID;
@@ -19,3 +24,4 @@ class DonationDetails {
 }
 
 ?>
+

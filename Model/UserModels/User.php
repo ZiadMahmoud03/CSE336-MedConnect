@@ -18,7 +18,7 @@ class User extends Person {
     private ?bool $isVolunteer;
 
     public function __construct(?int $userID = null, ?DonationDetails $donationHistory = null, ?string $nationalID = null, 
-                                ?array $registeredEvents = null, ?array $skills = null, ?bool $isVolunteer = null, Address $address = null, ?string $firstName = null, ?string $lastName = null, ?string  $email = null, ?string  $phone = null) {
+                                ?array $registeredEvents = null, ?array $skills = null, ?bool $isVolunteer = null, Address $address = null, ?string $firstName = null, ?string $lastName = null, ?string  $email = null, ?string  phone = null) {
         
         parent::__construct(null, $firstName, $lastName, $email, $phone, $address);
         $this->userID = $userID;
@@ -39,7 +39,7 @@ class User extends Person {
         return $stmt->execute();
     }
 
-    public function trackDonationHistory(): array {
+   /* public function trackDonationHistory(): array {
         $db = Database::getInstance();
 
         $stmt = $db->prepare("SELECT * FROM DonationDetails WHERE user_id = ?");
@@ -66,6 +66,7 @@ class User extends Person {
         $status = $result->fetch_assoc()['status'];
         return $status ?: 'No donation status found';
     }
+        */
 
     /* public function updateSkills(array $newSkills): bool {
         $this->skills = $newSkills;  
@@ -92,11 +93,12 @@ class User extends Person {
         return $stmt->execute();
     }
 
-    public function createAccount(string $email, string $password, string $firstName, string $lastName, string $phone, Address $address): bool {
+    //Removed Address
+    public function createAccount(string $email, string $password, string $firstName, string $lastName, string $phone, string $nationalID): bool {
         $db = Database::getInstance();
 
-        $stmt = $db->prepare("INSERT INTO Person (firstName,lastName, email, phone, password, address_id) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssi", $name, $email, $phone, $password, $address->getAddressID());
+        $stmt = $db->prepare("INSERT INTO Person (firstName,lastName, email, phone, password, nationalID) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssi", $name, $email, $phone, $password, $nationalID);
 
         return $stmt->execute();
     }
