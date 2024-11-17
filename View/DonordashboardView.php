@@ -4,26 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donor Profile</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="<?=URL_ROOT?>/assets/css/style.css">
     <script src="https://kit.fontawesome.com/193fff84d2.js" crossorigin="anonymous"></script>
-    <script src="script.js"></script>
+    <script src="<?=URL_ROOT?>/assets/js/script.js"></script>
 </head>
 <body>
     <div class="navbar">
         <div class="logo">
-            <img src="Images\Logo.png" alt="Logo">
+            <img src="<?=URL_ROOT?>/assets/images/Logo.png" alt="Logo">
         </div>
         <div class="buttons">
-            <a href="MoneyDonationView.php"><button>Donate Money</button></a>
-            <a href="ItemDonationView.php"><button>Donate Items</button></a>
+        <a href="<?=URL_ROOT?>/moneydonation"><button>Donate Money</button></a>
+        <a href="<?=URL_ROOT?>/itemdonation"><button>Donate Items</button></a>
         </div>
         <div class="search-bar">
             <input type="text" placeholder="Search...">
         </div>
         <div class="user-actions">
-            <a href="LoginView.php"><button>Login</button></a>
-            <a href="SignupView.php"><button>Register</button></a>
-            <a href="DonordashboardView.php"><i class="fa-solid fa-user" style="color: #000000;"></i></a>
+        <a href="<?=URL_ROOT?>/login"><button>Login</button></a>
+        <a href="<?=URL_ROOT?>/signup"><button>Register</button></a>
+        <a href="<?=URL_ROOT?>/donordashboard"><i class="fa-solid fa-user" style="color: #000000;"></i></a>
         </div>
     </div>
 
@@ -70,7 +70,6 @@
                 <th>Donation</th>
                 <th>Hospital</th>
                 <th>Status</th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -79,28 +78,24 @@
                 <td>$25.00</td>
                 <td>Hospital 2</td>
                 <td><span class="complete">Complete</span></td>
-                <td><a href="#" class="view-receipt">View Receipt</a></td>
             </tr>
             <tr>
                 <td>March 19, 2021</td>
                 <td>$25.00</td>
                 <td>Hospital 2</td>
                 <td><span class="complete">Complete</span></td>
-                <td><a href="#" class="view-receipt">View Receipt</a></td>
             </tr>
             <tr>
                 <td>March 19, 2021</td>
                 <td>$25.00</td>
                 <td>Hospital 2</td>
                 <td><span class="complete">Complete</span></td>
-                <td><a href="#" class="view-receipt">View Receipt</a></td>
             </tr>
             <tr>
                 <td>March 19, 2021</td>
                 <td>$25.00</td>
                 <td>Hospital 2</td>
                 <td><span class="complete">Complete</span></td>
-                <td><a href="#" class="view-receipt">View Receipt</a></td>
             </tr>
    
         </tbody>
@@ -111,5 +106,40 @@
 
         </div>
     </div>
+
+    <footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section about">
+            <h4>About Us</h4>
+            <p></p>
+        </div>
+
+        <div class="footer-section links">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Donate Now</a></li>
+                <li><a href="#">Events</a></li>
+                <li><a href="#">Volunteer</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section contact">
+            <h4>Contact Us</h4>
+            <ul>
+                <li><strong>Email:</strong></li>
+                <li><strong>Phone:</strong></li>
+                <li><strong>Address:</strong> </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2024 MedConnect. All rights reserved.</p>
+    </div>
+</footer>
 </body>
 </html>
