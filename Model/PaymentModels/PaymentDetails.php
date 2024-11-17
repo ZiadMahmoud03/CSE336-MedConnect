@@ -1,23 +1,31 @@
 <?php
+
+ob_start();
+require_once "config/db-conn-setup.php";
+ob_end_clean();
+
 class PaymentDetails {
-    private int $paymentDetailID;
-    private int $paymentID;
-    private int $donationID;
-    private string $timestamp;
-    private string $status;
+    private ?int $paymentDetailID;
+    private ?int $paymentID;
+    private ?int $donationID;
+    private ?string $timestamp;
+    private ?string $status;
     private ?string $remarks;
 
-    public function __construct(
-        ?int $paymentDetailID = null,
-        int $paymentID,
-        int $donationID,
-        string $status = "pending", // Default status
-        ?string $remarks = null
-    ) {
-        $this->paymentDetailID = $paymentDetailID;
-        $this->paymentID = $paymentID;
-        $this->donationID = $donationID;
-        $this->status = $status;
+    public function __construct( 
+        ?int $paymentDetailID = null, 
+        ?int $paymentID = null, 
+        ?int $donationID = null, 
+        ?string $timestamp = null, 
+        ?string $status = "pending", // Default status 
+        ?string $remarks = null 
+    ) { 
+        $this->paymentDetailID = $paymentDetailID; 
+        $this->paymentID = $paymentID; 
+        $this->donationID = $donationID; 
+        $this->timestamp = $timestamp ?? date('Y-m-d H:i:s'); 
+        // Default to current timestamp if null 
+        $this->status = $status; 
         $this->remarks = $remarks;
     }
 

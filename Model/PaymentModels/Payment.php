@@ -1,27 +1,30 @@
 <?php
+
+ob_start();
+require_once "config/db-conn-setup.php";
+ob_end_clean();
 class Payment {
-    private int $paymentID;
-    private string $type; // e.g., credit_card, debit_card, etc.
-    private float $amount;
-    private int $userID;
-    private int $donationID;
+    private ?int $paymentID;
+    private ?string $type; 
+    private ?float $amount;
+    private ?int $userID;
+    private ?int $donationID;
 
-    public function __construct(
-        ?int $paymentID = null,
-        string $type = "credit_card", // Default to credit_card
-        float $amount,
-        int $userID,
-        int $donationID
-    ) {
-        $this->paymentID = $paymentID;
-        $this->type = $type;
-        $this->amount = $amount;
-        $this->userID = $userID;
-        $this->donationID = $donationID;
-
-        // Ensure payment type is valid
-        if (!in_array($type, ['credit_card', 'debit_card', 'paypal', 'other_online'])) {
-            throw new InvalidArgumentException("Invalid payment type. Only online payment methods are allowed.");
+    public function __construct( 
+        ?int $paymentID = null, 
+        ?string $type = "credit_card", // Default to credit_card 
+        ?float $amount = null, 
+        ?int $userID = null, 
+        ?int $donationID = null 
+    ) { 
+        $this->paymentID = $paymentID; 
+        $this->type = $type; 
+        $this->amount = $amount; 
+        $this->userID = $userID; 
+        $this->donationID = $donationID; 
+        // Ensure payment type is valid 
+        if ($type !== null && !in_array($type, ['credit_card', 'debit_card', 'paypal', 'other_online'])) { 
+            throw new InvalidArgumentException("Invalid payment type. Only online payment methods are allowed."); 
         }
     }
 
