@@ -5,10 +5,6 @@ require_once "config/db-conn-setup.php";
 
 ob_end_clean();  
 
-ob_start();
-require_once "config/db-conn-setup.php";
-ob_end_clean();
-
 class DonationDetails {
     private ?int $donationDetailsID;
     private ?int $donationID;
@@ -68,10 +64,6 @@ class DonationDetails {
                 $this->status
             );
 
-<<<<<<< HEAD
-?>
-
-=======
             if ($stmt->execute()) {
                 $this->donationDetailsID = $stmt->insert_id;
                 return true;
@@ -162,4 +154,3 @@ class DonationDetails {
 
 }
 ?>
->>>>>>> c018048f9e968f6b66b99f567bb72b4310bdcd25
