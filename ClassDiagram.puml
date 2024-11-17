@@ -1,21 +1,39 @@
 @startuml
 'https://plantuml.com/class-diagram
 
+
+left to right direction
+
+
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam lineThickness 2
+skinparam defaultFontName Arial
+skinparam nodeMargin 30
+skinparam componentStyle rectangle
+
+
+skinparam linetype ortho
+
 package "Model" {
-    abstract class  Person{
+    abstract class Person {
         -personID: int
         -name: String
         -email: String
-        -phone: int
+        -password: String
         -address: Address
+        -phone: int
         +login()
         +createAccount()
         +updateProfile()
     }
 
-    class Donor extends Person{
+    class User extends Person {
         -donationHistory: DonationDetails
         -nationalID: int
+        -registeredEvents: Event
+        -skills: List<String>
+        -isVolunteer: boolean
         +trackDonationHistory()
         +trackDonationStatus()
         +setRecurringDonations()
@@ -23,9 +41,12 @@ package "Model" {
         +fillDonationForm()
         +choosePickUpOrDropOff()
         +receiveNotification()
+        +signUpForEvent(Event event)
+        +updateSkills(List<String> newSkills)
+        +checkAvailability()
     }
 
-    class HospitalAdmin extends Person{
+    class HospitalAdmin extends Person {
         -hospitalID: int
         +uploadRequiredItems()
         +notifyExpiringMedicine()
@@ -41,245 +62,369 @@ package "Model" {
         -parent_id: int 
     }
 
-    abstract class Item{
+    abstract class Item {
         -itemID: int
         -name: String
+        -itemDescription : String
         -quantityAvailable: int
         +checkAvailability()
     }
 
-    class Medicine extends Item{
+    class VolunteerDetails {
+        -volunteerID: int
+        -eventID: int
+        -hours: int
+        +getDetails()
+    }
+
+    class Event {
+        -eventID: int
+        -name: String
+        -date: date
+        -location: String
+        -description: String
+        -volunteerList: List
+        +createEvent()
+        +updateEvent()
+        +deleteEvent()
+        +notifyVolunteers()
+    }
+
+    class EventDetails {
+        -eventDetailsID: int
+        -eventID: int
+        -volunteerID: int
+        -attendance: String
+        +getDetails()
+    }
+
+    class Medicine extends Item {
         -expiryDate: date
         +checkExpiry()
     }
 
-    class Equipment extends Item{
+    class Equipment extends Item {
         -condition: String
         +checkCondition()
     }
 
-    interface Donate{
+    interface Donate {
         +makeDonation()
     }
 
-    class DonationDetails{
-        -donationDetailsID:int
-        -donationID:int
+    class DonationDetails {
+        -donationDetailsID: int
+        -donationID: int
         -medicineID: int
         -equipmentID: int
         -quantity: int
         +getDetails()
     }
 
-    class BasicDonation implements Donate{
-        -donationID
-        -medicineID
-        -quantity
+    class BasicDonation implements Donate {
+        -donationID: int
+        -medicineID: int
+        -quantity: int
         +makeDonation()
     }
 
-    abstract class DonationDecorator implements Donate{
-        -wrappedDonation: Donation
-        +makeDonation()
-    }
-
-    class RecurringDonation extends DonationDecorator{
-        -frequency
-        +makeDonation()
-    }
-
-
-    class MedicalEquipmentDonation extends DonationDecorator{
-        -equipmentList: List
-        +makeDonation()
-    }
-
-
-    class FundsDonation extends DonationDecorator{
-        -amount
-        +makeDonation()
-    }
-
-
+   
 }
 
-package  "View"{
+package "View" {
+    
+    abstract class BaseView {
+        +render()
+        +update()
+    }
 
-        abstract class BaseView {
-            +render()
-            +update()
-        }
+    class DonationView extends BaseView{
+        +showDonationForm()
+        +chooseLocation()
+        +displayItemDescription()
+    }
 
-        class DonorDashboardView extends BaseView {
-            +displayDonationHistory()
-            +showDonationForm()
-            +displayNotifications()
-        }
+    class DonorDashboardView extends BaseView {
+        +displayDonationHistory()
+        +showDonationForm()
+        +displayNotifications()
+    }
+    
+    class MoneyDonationView extends BaseView {
+        +showMoneyDonationForm()
+        +displayConfirmation()
+        +chooseLocation()
+    }
 
-        class HospitalAdminDashboardView extends BaseView {
-            +displayInventory()
-            +showDonationRequests()
-            +displayNotifications()
-        }
+    class HospitalAdminDashboardView extends BaseView {
+        +displayInventory()
+        +showDonationRequests()
+        +displayNotifications()
+    }
 
-        class LoginView extends BaseView {
-            +showLoginForm()
-            +displayError()
-        }
+    class LoginView extends BaseView {
+        +showLoginForm()
+        +displayError()
+    }
 
-        class PaymentView extends BaseView {
-            +showPaymentForm()
-            +displayConfirmation()
-        }
+
+    class DonationHistoryView extends BaseView {
+        +displayDonationHistory()
+        +displayDonationDetails()
+    }
+
+    class RegistrationView extends BaseView {
+        +showRegistrationForm()
+        +displayError()
+    }
+
+    class NotificationView extends BaseView {
+        +displayNotification()
+    }
+
+    class EventView extends BaseView {
+        +showEventDetails()
+       
+    }
+
+    class UserProfileView extends BaseView {
+        +showProfileDetails()
+        +showUpdateForm()
+    }
+
+    class VolunteerRegistrationView extends BaseView {
+        +showVolunteerForm()
+        +displayConfirmation()
+    }
+
+    class SearchResultsView extends BaseView {
+        +displayResults()
+    }
+
+    class FilterResultsView extends BaseView {
+        +displayFilteredResults()
+    }
 }
 
-
-package "Controller"{
-
-    class PaymentHandler{
-        -paymentStrategy: PaymentStrategy
-        -paymentID: int
+package "Controller" {
+    class MoneyDonationController {
+        -moneydonationStrategy: MoneyDonationStrategy
+        -moneydonationID: int
         -amount: int
-        -date: date
-        -paymentMethod: String
-        +makePayment()
-
+        -moneydonationMethod: String
+        +makeMoneyDonation()
     }
 
-    class LoginHandler{
+    class LoginController {
         -loginStrategy: LoginStrategy
         +login(userCredentials)
     }
 
-    class SearchHandler{
+    class SearchController {
         -searchStrategy: SearchStrategy
         +search(searchQuery)
     }
 
-    class DonationFilterHandler{
+    class DonationFilterController {
         -filterStrategy: FilterStrategy
         +filter(searchQuery)
     }
 
-    class DonationHistoryFilterHandler{
+    class DonationHistoryFilterController {
         -filterStrategy: FilterStrategy
+        -date: date
         +filter(searchQuery)
     }
 
+    class DonationController {
+        +createDonation(donationDetails)
+        +updateDonation(donationID, updatedDetails)
+        +cancelDonation(donationID)
+        +viewDonationStatus(donationID)
+    }
+
+    class UserController {
+        +registerUser(userDetails)
+        +loginUser(userCredentials)
+        +updateProfile(userID, updatedDetails)
+        +trackDonationHistory(userID)
+    }
+
+    class EventController {
+        +createEvent(eventDetails)
+        +updateEvent(eventID, updatedDetails)
+        +deleteEvent(eventID)
+        +notifyVolunteers(eventID)
+    }
 }
 
+package "Services" {
+    abstract class DonationDecorator {
+        -wrappedDonation: Donate
+        +makeDonation()
+    }
 
+    class RecurringDonation extends DonationDecorator {
+        -frequency
+        +makeDonation()
+    }
 
-interface PaymentStrategy{
-    +pay(paymentDetails)
-}
+    class MedicalEquipmentDonation extends DonationDecorator {
+        -equipmentList: List
+        +makeDonation()
+    }
 
-class OnlinePayment implements PaymentStrategy{
-    +pay(paymentDetails)
-}
+    class FundsDonation extends DonationDecorator {
+        -amount
+        +makeDonation()
+    }
 
-class CashPayment implements PaymentStrategy{
-    +pay(paymentDetails)
-}
+    interface Observer {
+        +update(notificationType: String, message: String)
+    }
 
+    class EmailNotification implements Observer {
+        -status: String
+        +update(notificationType: String, message: String)
+    }
 
+    class InAppNotification implements Observer {
+        -status: String
+        +update(notificationType: String, message: String)
+    }
 
-interface Notification{
-    +sendNotification(donorID, message)
-}
+    class SMSNotification implements Observer {
+        -status: String
+        +update(notificationType: String, message: String)
+    }
 
+    interface Subject {
+        +subscribe(observer: Observer)
+        +unsubscribe(observer: Observer)
+        +notifySubscribers(notificationType: String, message: String)
+    }
 
-class EmailNotification implements Notification{
-    +send(donorID, message)
-}
+    class NotificationSubject extends Subject {
+        -subscribers: List<Observer>
+        -state: String
+        +subscribe(observer: Observer)
+        +unsubscribe(observer: Observer)
+        +notifySubscribers(notificationType: String, message: String)
+    }
 
-class InAppNotifcation implements Notification{
-    +send(donorID, message)
-}
+    interface MoneyDonationStrategy {
+        +pay(moneydonationDetails)
+    }
 
+    class OnlineMoneyDonation implements MoneyDonationStrategy {
+        +pay(moneydonationDetails)
+    }
 
-class NotificationFactory{
-    +createNotification()
-}
+    class CashDonation implements MoneyDonationStrategy {
+        +pay(moneydonationDetails)
+    }
 
+    interface LoginStrategy {
+        +login(userCredentials)
+    }
 
-interface LoginStrategy{
-    +login(userCredentials)
-}
+    class EmailLogin implements LoginStrategy {
+        +login(userCredentials)
+    }
 
-class EmailLogin implements LoginStrategy{
-    +login(userCredentials)
-}
+    class GoogleLogin implements LoginStrategy {
+        +login(userCredentials)
+    }
 
-class GoogleLogin implements LoginStrategy{
-    +login(userCredentials)
-}
+    class FacebookLogin implements LoginStrategy {
+        +login(userCredentials)
+    }
 
-class FacebookLogin implements LoginStrategy{
-    +login(userCredentials)
-}
+    interface SearchStrategy {
+        +search(searchQuery)
+    }
 
+    class SearchByMedicine implements SearchStrategy {
+        +search(searchQuery)
+    }
 
-interface SearchStrategy{
-    +search(searchQuery)
-}
+    class SearchByHospital implements SearchStrategy {
+        +search(searchQuery)
+    }
 
-class SearchByMedicine implements SearchStrategy{
-    +search(searchQuery)
-}
+    class SearchByEquipment implements SearchStrategy {
+        +search(searchQuery)
+    }
 
-class SearchByHospital implements SearchStrategy{
-    +search(searchQuery)
-}
+    interface FilterStrategy {
+        +filter(searchQuery)
+    }
 
-class SearchByEquipment implements SearchStrategy{
-    +search(searchQuery)
-}
+    class FilterByRecentGroup implements FilterStrategy {
+        +filter(searchQuery)
+    }
 
-interface FilterStrategy{
-    +filter(searchQuery)
-}
+    class FilterByItemTypeGroup implements FilterStrategy {
+        +filter(searchQuery)
+    }
 
-class FilterByRecentGroup implements FilterStrategy{
-    +filter(searchQuery)
-}
+    class FilterByHospitalGroup implements FilterStrategy {
+        +filter(searchQuery)
+    }
 
-class FilterByItemTypeGroup implements FilterStrategy{
-    +filter(searchQuery)
-}
+    class FilterByUrgencyGroup implements FilterStrategy {
+        +filter(searchQuery)
+    }
+} 
 
-class FilterByHospitalGroup implements FilterStrategy{
-    +filter(searchQuery)
-}
-
-class FilterByUrgencyGroup implements FilterStrategy{
-    +filter(searchQuery)
-}
-
-
-
-Donor *-- BasicDonation
-Donor o-- DonationDetails
+' Define relationships between classes
+User *-- BasicDonation
+User o-- DonationDetails
 Medicine *-- DonationDetails
 BasicDonation *-- DonationDetails
-DonationDecorator o-- Donate
-LoginHandler o-- LoginStrategy
-Donor -- LoginHandler
-SearchHandler o-- SearchStrategy
-Donor -- SearchHandler
+LoginController o-- LoginStrategy
+User -- LoginController
+SearchController o-- SearchStrategy
+User -- SearchController
 HospitalAdmin o-- Item
 Equipment *-- DonationDetails
-Donor *-- Address
-PaymentHandler o-- PaymentStrategy
-Donor -- PaymentHandler
-Donor -- DonationHistoryFilterHandler
-DonationHistoryFilterHandler o-- FilterStrategy
+User *-- Address
+MoneyDonationController o-- MoneyDonationStrategy
+User -- MoneyDonationController
+User -- DonationHistoryFilterController
+DonationHistoryFilterController o-- FilterStrategy
 HospitalAdmin *-- Address
-HospitalAdmin -- DonationFilterHandler
-DonationFilterHandler o-- FilterStrategy
-Person <-- NotificationFactory
-NotificationFactory --> EmailNotification
-NotificationFactory --> InAppNotifcation
+HospitalAdmin -- DonationFilterController
+DonationFilterController o-- FilterStrategy
 Address "0..*" --> "1" Address : Parent
+Event *-- EventDetails
+User o-- VolunteerDetails
+Event -- User
+
+UserController o-- LoginStrategy  
+UserController --> Person  
+DonorDashboardView --> DonationController 
+HospitalAdminDashboardView --> DonationController 
+LoginView --> LoginController 
+MoneyDonationView --> MoneyDonationController 
+DonationHistoryView --> DonationController 
+EventView --> EventController 
+RegistrationView --> UserController 
+Person <-- UserController
+Donate <--o DonationDecorator
+User -- EventDetails
+Event -- EventController
+DonationController <-- NotificationSubject
+UserController <-- NotificationSubject
+EventController <-- NotificationSubject
+NotificationSubject o--> Observer
+
+UserProfileView --> UserController
+VolunteerRegistrationView --> UserController
+SearchResultsView --> SearchController
+HospitalAdminDashboardView --> UserController
+FilterResultsView --> DonationFilterController
+EventView --> EventController
+DonationView --> DonationController
 
 @enduml
