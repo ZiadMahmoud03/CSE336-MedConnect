@@ -40,12 +40,12 @@
         <label for="amount">Donation Amount:</label>
         <input type="number" id="amount" name="amount" min="1" required>
         
-        <label for="frequency">Frequency</label> 
+       <!--- <label for="frequency">Frequency</label> 
         <select id="frequency"> 
         <option value="one-time">One Time</option> 
         <option value="monthly">Monthly</option>
         <option value="yearly">Yearly</option> 
-        </select> 
+        </select> ----->
         <label for="payment-method">Payment Option</label>
          <select id="payment-method">
          <option value="pickup">Pick Up</option> 
