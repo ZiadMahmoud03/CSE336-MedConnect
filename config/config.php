@@ -26,7 +26,9 @@
         'DB_EVENT_TABLE'=> 'Event',
         'DB_EVENT_DETAILS_TABLE'=> 'EventDetails',
         'DB_VOLUNTEER_DETAILS_TABLE'=> 'VolunteerDetails',
-        'DB_HOSPITAL_TABLE' => 'Hospital'
+        'DB_HOSPITAL_TABLE' => 'Hospital',
+        'DB_PAYMENT_TABLE' => 'Payment',
+        'DB_PAYMENT_DETAILS_TABLE' => 'PaymentDetails',
 
         // Routes can be defined here if needed
     );

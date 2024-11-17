@@ -132,6 +132,26 @@ run_queries(
             FOREIGN KEY (volunteer_id) REFERENCES VolunteerDetails(volunteer_id)
         );",
 
+        "CREATE TABLE $configs->DB_NAME.$configs->DB_PAYMENT_TABLE (
+            payment_id INT AUTO_INCREMENT PRIMARY KEY,
+            type ENUM('credit_card', 'debit_card', 'paypal', 'other_online') NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            user_id INT NOT NULL,
+            donation_id INT NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE,
+            FOREIGN KEY (donation_id) REFERENCES Donation(donation_id) ON DELETE CASCADE
+        );",
+
+        "CREATE TABLE $configs->DB_NAME.$configs->DB_PAYMENT_DETAILS_TABLE (
+            payment_detail_id INT AUTO_INCREMENT PRIMARY KEY,
+            payment_id INT NOT NULL,
+            donation_id INT NOT NULL,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            status ENUM('pending', 'completed', 'failed') NOT NULL,
+            FOREIGN KEY (payment_id) REFERENCES Payment(paymentID) ON DELETE CASCADE,
+            FOREIGN KEY (donation_id) REFERENCES Donation(donation_id) ON DELETE CASCADE
+        );",
+
             
         "INSERT INTO $configs->DB_NAME.$configs->DB_ADDRESS_TABLE (address_id, name, parent_id) VALUES 
             (1, 'Egypt', 0),                    -- Parent node for all addresses
@@ -231,7 +251,20 @@ run_queries(
         "INSERT INTO $configs->DB_NAME.$configs->DB_EVENT_DETAILS_TABLE (event_id, volunteer_id, attendance) VALUES 
             (1, 1, 'Attended'),
             (2, 2, 'Pending'),
-            (3, 3, 'Registered');"
+            (3, 3, 'Registered');",
+
+        // Populate Payment table
+        "INSERT INTO $configs->DB_NAME.$configs->DB_PAYMENT_TABLE (type, amount, user_id, donation_id) VALUES 
+            ('credit_card', 100.00, 1, 1), 
+            ('paypal', 50.00, 2, 2), 
+            ('debit_card', 75.00, 3, 3), 
+            ('other_online', 120.00, 4, 4);",
+
+        "INSERT INTO $configs->DB_NAME.$configs->DB_PAYMENT_DETAILS_TABLE (payment_id, donation_id, status) VALUES 
+            (1, 1, 'completed'), 
+            (2, 2, 'pending'), 
+            (3, 3, 'failed'), 
+            (4, 4, 'completed');"
     ]
 );
 ?>
