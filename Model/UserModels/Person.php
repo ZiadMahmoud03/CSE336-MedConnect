@@ -93,29 +93,6 @@ abstract class Person {
         return $stmt->execute();
     }
 
-    // Method to create account (registration)
-    public function createAccount(string $password): bool {
-        $db = Database::getInstance();
-
-        // Prepare the SQL statement to insert the person data
-        $stmt = $db->prepare("INSERT INTO Person (first_name, last_name, email, phone, password, address_id) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssi", $this->firstName, $this->lastName, $this->email, $this->phone, $password, $this->address->getAddressID());
-
-        // Execute the query
-        return $stmt->execute();
-    }
-
-    // Method to update the profile
-    public function updateProfile(string $newPassword): bool {
-        $db = Database::getInstance();
-
-        // Prepare the SQL statement to update the password
-        $stmt = $db->prepare("UPDATE Person SET password = ? WHERE email = ?");
-        $stmt->bind_param("ss", $newPassword, $this->email);
-
-        // Execute the query
-        return $stmt->execute();
-    }
 
     // Method to login
     public function login(string $email, string $password): bool {
