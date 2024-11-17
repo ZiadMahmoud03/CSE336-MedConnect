@@ -8,7 +8,7 @@
     <script src="https://kit.fontawesome.com/193fff84d2.js" crossorigin="anonymous"></script>
     <script src="<?=URL_ROOT?>/assets/js/script.js"></script>
 </head>
-<body class="home">
+<body>
     <div class="navbar">
         <div class="logo">
             <img src="<?=URL_ROOT?>/assets/images/Logo.png" alt="Logo">
@@ -18,7 +18,7 @@
         <a href="<?=URL_ROOT?>/itemdonation"><button>Donate Items</button></a>
         </div>
         <div class="search-bar">
-            <input type="text" placeholder="Search...">
+            <input type="text" placeholder="Search">
         </div>
         <div class="user-actions">
         <a href="<?=URL_ROOT?>/login"><button>Login</button></a>
@@ -27,105 +27,55 @@
         </div>
     </div>
     
-    <h2>Most Recent</h2>
-    <div class="slider-container">
-        <div class="wrapper">
-            <!-- Left button -->
-            <i class="prev-btn fas fa-angle-left" onclick="slideLeft()"></i>
-
-            <!-- Carousel container -->
-            <ul class="carousel">
-                <li class="card">
-                    <div class="img">
-                        <img src="Images\kisspng-57357-hospital-dar-al-fouad-cancer-child-5b3e67bbbbbc02.222815191530816443769.jpg" alt="img" draggable="false">
-                    </div>
-                    <h4>hi</h4>
-                </li>
-                <li class="card">
-                    <div class="img">
-                        <img src="" alt="img" draggable="false">
-                    </div>
-                    <h4>hi</h4>
-                </li>
-                <li class="card">
-                    <div class="img">
-                        <img src="" alt="img" draggable="false">
-                    </div>
-                    <h4>hi</h4>
-                </li>
-                <li class="card">
-                    <div class="img">
-                        <img src="" alt="img" draggable="false">
-                    </div>
-                    <h4>hi</h4>
-                </li>
-                <li class="card">
-                    <div class="img">
-                        <img src="" alt="img" draggable="false">
-                    </div>
-                    <h4>hi</h4>
-                </li>
-                <li class="card">
-                    <div class="img">
-                        <img src="" alt="img" draggable="false">
-                    </div>
-                    <h4>hi</h4>
-                </li>
-            </ul>
-
-            <!-- Right button -->
-            <i class="next-btn fas fa-angle-right" onclick="slideRight()"></i>
-        </div>
-    </div>
     
     <h2>Most Donated</h2>
     <div class="slider-container">
         <div class="wrapper">
             <!-- Left button -->
-            <i class="prev-btn fas fa-angle-left" onclick="slideLeft()"></i>
+            <i class="prev-btn fas fa-angle-left" onclick="slideLeft(event)"></i>
 
             <!-- Carousel container -->
             <ul class="carousel">
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/91kIVwRYUpL._AC_SL1500_.jpg" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Wheelchair</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/drive-medical-independent-living-rtl10402-64_600.avif" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Crutches</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/https___cloudfront-us-east-2.images.arcpublishing.com_reuters_SQ4LJZ4KYVM7VOH6YA6YDKMVOI.avif" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Lumakras</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/LGMSH5CKNNO3TENSD3QSN6FNOQ.jpg" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Enhertu</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/H409080bd3b154374beeff2edb0fdd83c8.jpg_300x300.avif" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Hospital Bed</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/nebulizer.jpg" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
+                    <h4>Nebulizer</h4>
                 </li>
             </ul>
 
             <!-- Right button -->
-            <i class="next-btn fas fa-angle-right" onclick="slideRight()"></i>
+            <i class="next-btn fas fa-angle-right" onclick="slideRight(event)"></i>
         </div>
     </div> 
 
@@ -133,50 +83,44 @@
     <div class="slider-container">
         <div class="wrapper">
             <!-- Left button -->
-            <i class="prev-btn fas fa-angle-left" onclick="slideLeft()"></i>
+            <i class="prev-btn fas fa-angle-left" onclick="slideLeft(event)"></i>
 
             <!-- Carousel container -->
             <ul class="carousel">
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/kisspng-57357-hospital-dar-al-fouad-cancer-child-5b3e67bbf03836.324450831530816443984.png" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/24c01355787951.Y3JvcCwxMTk1LDkzNSwxMDMsMA.png" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/a088b693705887.Y3JvcCwzMzY2LDI2MzMsMCww.png" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/images.png" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets/images/ormanb-logo.png" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
                 </li>
                 <li class="card">
                     <div class="img">
-                        <img src="" alt="img" draggable="false">
+                        <img src="<?=URL_ROOT?>/assets\images\logo (1).png" alt="img" draggable="false">
                     </div>
-                    <h4>hi</h4>
                 </li>
             </ul>
 
             <!-- Right button -->
-            <i class="next-btn fas fa-angle-right" onclick="slideRight()"></i>
+            <i class="next-btn fas fa-angle-right"onclick="slideRight(event)"></i>
         </div>
     </div> 
 
