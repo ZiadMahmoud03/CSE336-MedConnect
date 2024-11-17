@@ -18,7 +18,7 @@
             <input type="password" name="password" placeholder=" Enter your password" required>
             <input type="hidden" name="login_type" value="email">
             <button type="submit">Login</button>
-            <p>Don't have an account? <a href="<?=URL_ROOT?>/signup"> Register</a></p>
+            <p>Don't have an account? <a href="<?=URL_ROOT?>/signup">Register</a></p>
         </form>
         
     </div>
