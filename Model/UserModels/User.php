@@ -1,129 +1,159 @@
 <?php
-class User extends Person {
-    private DonationDetails $donationHistory;
-    private int $nationalID;
-    private Event $registeredEvents;
-    private array $skills;
-    private bool $isVolunteer;
 
-    public function __construct(
-        int $personID, 
-        string $name, 
-        string $email, 
-        int $phone, 
-        Address $address, 
-        DonationDetails $donationHistory, 
-        int $nationalID, 
-        Event $registeredEvents, 
-        array $skills, 
-        bool $isVolunteer
-    ) {
-        parent::__construct($personID, $name, $email, $phone, $address);
+ob_start();  
+
+require_once "config/db-conn-setup.php";  
+require_once "Model/Address.php";  
+require_once "Model/UserModels/Person.php";  
+
+ob_end_clean();  
+
+
+class User extends Person {
+    private ?int $userID;
+    private ?DonationDetails $donationHistory;
+    private ?string $nationalID;
+    private ?array $registeredEvents;
+    private ?array $skills;
+    private ?bool $isVolunteer;
+
+    public function __construct(?int $userID = null, ?DonationDetails $donationHistory = null, ?string $nationalID = null, 
+                                ?array $registeredEvents = null, ?array $skills = null, ?bool $isVolunteer = null, Address $address = null, ?string $firstName = null, ?string $lastName = null, ?string  $email = null, ?string  phone = null) {
+        
+        parent::__construct(null, $firstName, $lastName, $email, $phone, $address);
+        $this->userID = $userID;
         $this->donationHistory = $donationHistory;
         $this->nationalID = $nationalID;
         $this->registeredEvents = $registeredEvents;
         $this->skills = $skills;
         $this->isVolunteer = $isVolunteer;
+        $this->address = $address ?? new Address();  // Address should not be Null
     }
 
-    public function trackDonationHistory() {
-        // $query = "SELECT * FROM DonationDetails WHERE user_id = {$this->personID}";
-        // $result = run_select_query($query);
-        
-        // if ($result) {
-        //     while ($row = $result->fetch_assoc()) {
-        //         print_r($row); // Output or process donation history records
-        //     }
-        // }
+    public function signUpForEvent(Event $event): bool {
+        $db = Database::getInstance();
+
+        $stmt = $db->prepare("INSERT INTO user_events (user_id, event_id) VALUES (?, ?)");
+        $stmt->bind_param("ii", $this->userID, $event->getEventID());
+
+        return $stmt->execute();
     }
 
-    public function trackDonationStatus() {
-        // $query = "SELECT status FROM Donations WHERE user_id = {$this->personID}";
-        // $result = run_select_query($query);
+   /* public function trackDonationHistory(): array {
+        $db = Database::getInstance();
 
-        // if ($result) {
-        //     while ($row = $result->fetch_assoc()) {
-        //         print_r($row); // Output or process donation status records
-        //     }
-        // }
-    }
+        $stmt = $db->prepare("SELECT * FROM DonationDetails WHERE user_id = ?");
+        $stmt->bind_param("i", $this->userID);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    public function setRecurringDonations() {
-        // $query = "UPDATE Donations SET is_recurring = 1 WHERE user_id = {$this->personID}";
-        // run_query($query);
-    }
-
-    public function receiveReminder() {
-        $query = "SELECT reminder FROM Reminders WHERE user_id = {$this->personID}";
-        $result = run_select_query($query);
-
-        if ($result) {
-            while ($row = $result->fetch_assoc()) {
-                print_r($row); // Output or process reminder records
-            }
+        $donationHistory = [];
+        while ($row = $result->fetch_assoc()) {
+            // Assuming DonationDetails class properly handles $row array
+            $donationHistory[] = new DonationDetails($row); 
         }
+        return $donationHistory;
     }
 
-    public function fillDonationForm() {
-        // $query = "INSERT INTO DonationForm (user_id) VALUES ({$this->personID})";
-        // run_query($query);
+    public function trackDonationStatus(): string {
+        $db = Database::getInstance();
+
+        $stmt = $db->prepare("SELECT status FROM DonationDetails WHERE user_id = ?");
+        $stmt->bind_param("i", $this->userID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $status = $result->fetch_assoc()['status'];
+        return $status ?: 'No donation status found';
+    }
+        */
+
+    /* public function updateSkills(array $newSkills): bool {
+        $this->skills = $newSkills;  
+
+        $db = Database::getInstance();
+        $skills = implode(",", $newSkills);  // Store skills as a comma-separated string
+        $stmt = $db->prepare("UPDATE User SET skills = ? WHERE user_id = ?");
+        $stmt->bind_param("si", $skills, $this->userID);
+
+        return $stmt->execute();
+    }
+        */
+
+    public function checkAvailability(): bool {
+        return $this->isVolunteer ?? false;
     }
 
-    public function choosePickUpOrDropOff() {
-        // $query = "UPDATE DonationPreferences SET pickup_or_dropoff = 'pickup' WHERE user_id = {$this->personID}";
-        // run_query($query);
+    public function updateProfile(string $newPassword, string $newEmail, string $newPhone, Address $newAddress): bool {
+        $db = Database::getInstance();
+
+        $stmt = $db->prepare("UPDATE Person SET email = ?, password = ?, phone = ?, address_id = ? WHERE user_id = ?");
+        $stmt->bind_param("ssssi", $newEmail, $newPassword, $newPhone, $newAddress->getAddressID(), $this->userID);
+        
+        return $stmt->execute();
     }
 
-    public function receiveNotification() {
-        // $query = "SELECT notification FROM Notifications WHERE user_id = {$this->personID}";
-        // $result = run_select_query($query);
+    //Removed Address
+    public function createAccount(string $email, string $password, string $firstName, string $lastName, string $phone, string $nationalID): bool {
+        $db = Database::getInstance();
 
-        // if ($result) {
-        //     while ($row = $result->fetch_assoc()) {
-        //         print_r($row); // Output or process notifications
-        //     }
-        // }
+        $stmt = $db->prepare("INSERT INTO Person (firstName,lastName, email, phone, password, nationalID) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssi", $name, $email, $phone, $password, $nationalID);
+
+        return $stmt->execute();
     }
 
-    public function signUpForEvent(Event $event) {
-        // $query = "INSERT INTO EventSignUps (user_id, event_id) VALUES ({$this->personID}, {$event->getId()})";
-        // run_query($query);
+    public function getUserID(): int {
+        return $this->userID;
     }
 
-    public function updateSkills(array $newSkills) {
-        // $skillsString = implode(",", $newSkills);
-        // $query = "UPDATE Users SET skills = '$skillsString' WHERE user_id = {$this->personID}";
-        // run_query($query);
+    public function getSkills(): array {
+        return $this->skills;
     }
 
-    public function checkAvailability() {
-    //     $query = "SELECT availability FROM Users WHERE user_id = {$this->personID}";
-    //     $result = run_select_query($query);
-
-    //     if ($result) {
-    //         $availability = $result->fetch_assoc()['availability'];
-    //         echo "Availability: $availability";
-    //     }
+    public function getAddress(): Address {
+        return $this->address;
     }
 
-    public function authenticateByEmail(string $email, string $password): mixed {
-        // Get the database connection
+    public function setUserID(int $userID): void {
+        $this->userID = $userID;
+    }
+
+    public function setDonationHistory(DonationDetails $donationHistory): void {
+        $this->donationHistory = $donationHistory;
+    }
+
+    public function setIsVolunteer(bool $isVolunteer): void {
+        $this->isVolunteer = $isVolunteer;
+    }
+
+    public function authenticateByEmail(string $email, string $password): bool {
         $db = Database::getInstance();
         
-       
         $stmt = $db->prepare("SELECT * FROM Person WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
+        
         $result = $stmt->get_result();
         
         // Check if a user with the given email exists
         if ($result->num_rows === 1) {
             $user = $result->fetch_assoc();
+            
             // Compare the provided password with the stored password
             if ($user['password'] === $password) {
-                return $user; // Return user details on successful authentication
+
+                $this->userID = $user['person_id'];
+                $this->name = $user['name'];
+                $this->email = $user['email'];
+                $this->phone = $user['phone'];
+
+                $this->address = new Address($user['address_id']); 
+                return true; // Authentication successful
             }
         }
-        return false; // Return false if no match is found
+        return false; // Authentication failed
     }
+    
 }
+?>

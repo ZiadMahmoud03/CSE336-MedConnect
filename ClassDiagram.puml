@@ -18,7 +18,8 @@ skinparam linetype ortho
 package "Model" {
     abstract class Person {
         -personID: int
-        -name: String
+        -firstname: String
+        -lastname: String
         -email: String
         -password: String
 
@@ -29,8 +30,6 @@ package "Model" {
         -address: Address
         -phone: int
         +login()
-        +createAccount()
-        +updateProfile()
     }
 
     class User extends Person {
@@ -41,18 +40,20 @@ package "Model" {
         -isVolunteer: boolean
         +trackDonationHistory()
         +trackDonationStatus()
-        +setRecurringDonations()
-        +receiveReminder()
         +fillDonationForm()
         +choosePickUpOrDropOff()
         +receiveNotification()
         +signUpForEvent(Event event)
         +updateSkills(List<String> newSkills)
         +checkAvailability()
+        +createAccount()
+        +updateProfile()
+        +deleteAccount()
     }
 
     class HospitalAdmin extends Person {
         -hospitalID: int
+        -admin_id: int 
         +uploadRequiredItems()
         +notifyExpiringMedicine()
         +manageItems()
@@ -120,20 +121,40 @@ package "Model" {
     class DonationDetails {
         -donationDetailsID: int
         -donationID: int
-        -medicineID: int
-        -equipmentID: int
+        -type: string
+        -itemID: int
         -quantity: int
+        -unitPrice: float
+        -timeStamp: string
+        -status: string
         +getDetails()
     }
 
     class BasicDonation implements Donate {
         -donationID: int
-        -medicineID: int
-        -quantity: int
+        -userID: int
+        -amount: float
+        -urgency_level: UrgencyLevel
         +makeDonation()
+        +calculateImpact()
     }
 
-   
+   class Payment {
+        -paymentID: int
+        -type: Type
+        -amount: int
+        +makePayment()
+    }
+
+    class PaymentDetails {
+        -paymentDetailsID: int
+        -paymentID: int
+        -donationID: int
+        -amount: int
+        -paymentDate: date
+        +getDetails()
+    }
+
 }
 
 package "View" {
@@ -217,6 +238,7 @@ package "View" {
     class FilterResultsView extends BaseView {
         +displayFilteredResults()
     }
+
 }
 
 package "Controller" {
@@ -274,22 +296,22 @@ package "Controller" {
 package "Services" {
     abstract class DonationDecorator {
         -wrappedDonation: Donate
-        +makeDonation()
+        +calculateImpact()
     }
 
-    class RecurringDonation extends DonationDecorator {
-        -frequency
-        +makeDonation()
+    class LowUrgency extends DonationDecorator {
+        -urgencyFactor
+        +calculateImpact()
     }
 
-    class MedicalEquipmentDonation extends DonationDecorator {
-        -equipmentList: List
-        +makeDonation()
+    class MediumUrgency extends DonationDecorator {
+        -urgencyFactor
+        +calculateImpact()
     }
 
-    class FundsDonation extends DonationDecorator {
-        -amount
-        +makeDonation()
+    class HighUrgency extends DonationDecorator {
+        -urgencyFactor
+        +calculateImpact()
     }
 
     interface Observer {
@@ -329,7 +351,15 @@ package "Services" {
         +pay(moneydonationDetails)
     }
 
-    class OnlineMoneyDonation implements MoneyDonationStrategy {
+    class CreditCardMoneyDonation implements MoneyDonationStrategy {
+        +pay(moneydonationDetails)
+    }
+
+    class DebitCardMoneyDonation implements MoneyDonationStrategy {
+        +pay(moneydonationDetails)
+    }
+
+    class PaypalMoneyDonation implements MoneyDonationStrategy {
         +pay(moneydonationDetails)
     }
 
@@ -439,6 +469,9 @@ HospitalAdminDashboardView --> UserController
 FilterResultsView --> DonationFilterController
 EventView --> EventController
 DonationView --> DonationController
+User *-- Payment
+BasicDonation *-- Payment
+PaymentDetails *-- Payment
 
 
 @enduml

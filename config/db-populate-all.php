@@ -19,8 +19,8 @@ run_queries(
         // Create Person table with password field
         "CREATE TABLE $configs->DB_NAME.$configs->DB_PERSON_TABLE (
             person_id INT PRIMARY KEY AUTO_INCREMENT,
-            first_name VARCHAR(255) NOT NULL,
-            last_name VARCHAR(255) NOT NULL,
+            firstName VARCHAR(255) NOT NULL,
+            lastName VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL UNIQUE,
             phone VARCHAR(15),
             password VARCHAR(255) NOT NULL,  
@@ -81,11 +81,13 @@ run_queries(
         );",
 
         // Create Donation table
+  
         "CREATE TABLE $configs->DB_NAME.$configs->DB_DONATION_TABLE (
             donation_id INT PRIMARY KEY AUTO_INCREMENT,
             medicine_id INT,
             quantity INT,
             user_id INT,
+            urgency_level ENUM('low', 'medium', 'high') DEFAULT 'low',
             FOREIGN KEY (user_id) REFERENCES User(user_id),
             FOREIGN KEY (medicine_id) REFERENCES Medicine(medicine_id)
         );",
@@ -128,6 +130,26 @@ run_queries(
             attendance VARCHAR(255),
             FOREIGN KEY (event_id) REFERENCES Event(event_id),
             FOREIGN KEY (volunteer_id) REFERENCES VolunteerDetails(volunteer_id)
+        );",
+
+        "CREATE TABLE $configs->DB_NAME.$configs->DB_PAYMENT_TABLE (
+            payment_id INT AUTO_INCREMENT PRIMARY KEY,
+            type ENUM('credit_card', 'debit_card', 'paypal', 'other_online') NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            user_id INT NOT NULL,
+            donation_id INT NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES User(user_id),
+            FOREIGN KEY (donation_id) REFERENCES Donation(donation_id)
+        );",
+
+        "CREATE TABLE $configs->DB_NAME.$configs->DB_PAYMENT_DETAILS_TABLE (
+            payment_detail_id INT AUTO_INCREMENT PRIMARY KEY,
+            payment_id INT NOT NULL,
+            donation_id INT NOT NULL,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            status ENUM('pending', 'completed', 'failed') NOT NULL,
+            FOREIGN KEY (payment_id) REFERENCES Payment(payment_id),
+            FOREIGN KEY (donation_id) REFERENCES Donation(donation_id)
         );",
 
             
@@ -201,16 +223,17 @@ run_queries(
             (5, 'Used', 5);",
 
         // Populate Donation table
-        "INSERT INTO $configs->DB_NAME.$configs->DB_DONATION_TABLE (donation_id, medicine_id, quantity, user_id) VALUES 
-            (1, 1, 10, 1),
-            (2, 2, 5, 2),
-            (3, 3, 15, 3);",
+        "INSERT INTO $configs->DB_NAME.$configs->DB_DONATION_TABLE (donation_id, medicine_id, quantity, user_id, urgency_level) VALUES 
+            (1, 1, 10, 1, 'high'),  
+            (2, 2, 5, 2, 'low'),     
+            (3, 3, 15, 3, 'medium');",
 
         // Populate Donation Details table
         "INSERT INTO $configs->DB_NAME.$configs->DB_DONATION_DETAILS_TABLE (donation_id, medicine_id, equipment_id, quantity) VALUES 
             (1, 1, 1, 10),
             (2, 2, NULL, 5),
             (3, 3, 3, 15);",
+
 
         // Populate Event table
         "INSERT INTO $configs->DB_NAME.$configs->DB_EVENT_TABLE (name, date, location, description) VALUES 
@@ -228,7 +251,20 @@ run_queries(
         "INSERT INTO $configs->DB_NAME.$configs->DB_EVENT_DETAILS_TABLE (event_id, volunteer_id, attendance) VALUES 
             (1, 1, 'Attended'),
             (2, 2, 'Pending'),
-            (3, 3, 'Registered');"
+            (3, 3, 'Registered');",
+
+        // Populate Payment table
+        "INSERT INTO $configs->DB_NAME.$configs->DB_PAYMENT_TABLE (type, amount, user_id, donation_id) VALUES 
+            ('credit_card', 100.00, 1, 1), 
+            ('paypal', 50.00, 2, 2), 
+            ('debit_card', 75.00, 3, 3), 
+            ('other_online', 120.00, 4, 3);",
+
+        "INSERT INTO $configs->DB_NAME.$configs->DB_PAYMENT_DETAILS_TABLE (payment_id, donation_id, status) VALUES 
+            (1, 1, 'completed'), 
+            (2, 2, 'pending'), 
+            (3, 3, 'failed'), 
+            (4, 3, 'completed');"
     ]
 );
 ?>
