@@ -24,7 +24,7 @@
                </div>
             <input type="text" name="email" placeholder=" Enter your email" required>
             <input type="text" name="phone" placeholder=" Enter your phone number" required>
-            <select id="region" name="region" required>
+            <!----<select id="region" name="region" required>
                 <option value="" disabled selected>Select your region</option>
                 <option value="">Giza</option>
                 <option value="">Heliopolis</option>
@@ -35,7 +35,7 @@
                 <option value="">Aswan</option>
                 <option value="">Luxor</option>
                 <option value="">Hurghada</option>
-            </select>
+            </select>---->
             <input type="text" name="nationalid" placeholder=" Enter your national ID" required>
             <input type="password" name="password" placeholder=" Enter your password" required>
             <input type="password" name="conpassword" placeholder=" Confirm your password" required>
