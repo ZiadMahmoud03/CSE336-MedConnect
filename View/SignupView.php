@@ -26,7 +26,6 @@
             <input type="text" name="phone" placeholder=" Enter your phone number" required>
             <select id="region" name="region" required>
                 <option value="" disabled selected>Select your region</option>
-                <option value="">Cairo</option>
                 <option value="">Giza</option>
                 <option value="">Heliopolis</option>
                 <option value="">6th of October</option>
