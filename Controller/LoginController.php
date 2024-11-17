@@ -46,21 +46,23 @@ class LoginController
                 // Set session variables after successful authentication
                 $_SESSION['USER'] = $user;
                 $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_type'] = $user['type'];  // Admin or Donor
+               // $_SESSION['user_type'] = $user['type'];  // Admin or Donor
 
                 
-                switch ($_SESSION['user_type']) {
-                    case 'Donor':
-                        $this->view('donordashboard');  // Load the donor dashboard view directly
-                        break;
+                // switch ($_SESSION['user_type']) {
+                //     case 'Donor':
+                //         $this->view('donordashboard');  // Load the donor dashboard view directly
+                //         break;
 
-                    case 'Admin':
-                        $this->view('admindashboard');  // Load the admin dashboard view directly
-                        break;
+                //     case 'Admin':
+                //         $this->view('admindashboard');  // Load the admin dashboard view directly
+                //         break;
 
-                    default:
-                        throw new Exception("Unknown user type");
-                }
+                //     default:
+                //         throw new Exception("Unknown user type");
+                // }
+               // header('Location: /home');
+               $this->view('home');
 
                 exit;  
             } catch (Exception $e) {
