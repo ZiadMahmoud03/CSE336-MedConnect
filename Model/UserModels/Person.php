@@ -4,12 +4,12 @@ require_once "config/db-conn-setup.php";
 require_once "Address.php"; 
 
 abstract class Person {
-    private ?int $personID;
-    private ?string $firstName;
-    private ?string $lastName;
-    private ?string $email;
-    private ?string $phone;
-    private ?Address $address;
+    protected? int $personID;
+    protected ?string $firstName;
+    protected ?string $lastName;
+    protected ?string $email;
+    protected ?string $phone;
+    protected ?Address $address;
 
     // Constructor for Person class
     public function __construct(?int $personID = null, ?string $firstName = null, ?string $lastName = null, ?string $email = null, ?string $phone = null, ?Address $address = null) {
@@ -74,7 +74,6 @@ abstract class Person {
     public function save(): bool {
         $db = Database::getInstance();
 
-        // Prepare the SQL statement for inserting or updating the person
         if ($this->personID === null) {
             // Insert new person
             $stmt = $db->prepare("INSERT INTO Person (first_name, last_name, email, phone, address_id) VALUES (?, ?, ?, ?, ?)");
