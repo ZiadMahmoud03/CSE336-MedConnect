@@ -145,11 +145,9 @@ run_queries(
         "CREATE TABLE $configs->DB_NAME.$configs->DB_PAYMENT_DETAILS_TABLE (
             payment_detail_id INT AUTO_INCREMENT PRIMARY KEY,
             payment_id INT NOT NULL,
-            donation_id INT NOT NULL,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
             status ENUM('pending', 'completed', 'failed') NOT NULL,
             FOREIGN KEY (payment_id) REFERENCES Payment(payment_id),
-            FOREIGN KEY (donation_id) REFERENCES Donation(donation_id)
         );",
 
             
@@ -260,11 +258,11 @@ run_queries(
             ('debit_card', 75.00, 3, 3), 
             ('other_online', 120.00, 4, 3);",
 
-        "INSERT INTO $configs->DB_NAME.$configs->DB_PAYMENT_DETAILS_TABLE (payment_id, donation_id, status) VALUES 
-            (1, 1, 'completed'), 
-            (2, 2, 'pending'), 
-            (3, 3, 'failed'), 
-            (4, 3, 'completed');"
+        "INSERT INTO $configs->DB_NAME.$configs->DB_PAYMENT_DETAILS_TABLE (payment_id, status) VALUES 
+            (1, 'completed'), 
+            (2, 'pending'), 
+            (3, 'failed'), 
+            (4, 'completed');"
     ]
 );
 ?>
