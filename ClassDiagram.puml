@@ -21,6 +21,11 @@ package "Model" {
         -name: String
         -email: String
         -password: String
+
+=======
+        -address: Address
+        -phone: int
+
         -address: Address
         -phone: int
         +login()
@@ -160,6 +165,14 @@ package "View" {
         +displayInventory()
         +showDonationRequests()
         +displayNotifications()
+
+
+    }
+
+    class LoginView extends BaseView {
+        +showLoginForm()
+        +displayError()
+
     }
 
     class LoginView extends BaseView {
@@ -427,4 +440,6 @@ FilterResultsView --> DonationFilterController
 EventView --> EventController
 DonationView --> DonationController
 
+
 @enduml
+
