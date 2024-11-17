@@ -7,34 +7,55 @@ ob_end_clean();
 
 class BasicDonation implements Donate {
     private ?int $donationID;
-    private ?int $medicineID;
-    private ?int $quantity;
+    private ?int $userID;
+    private ?float $amount;
+    
     private string $urgencyLevel;
-
+    
     private const URGENCY_LEVELS = ['low', 'medium', 'high'];
 
+
     public function __construct(
-        ?int $donationID = null, 
-        ?int $medicineID = null, 
-        ?int $quantity = null, 
+        ?int $donationID = null,
+        ?int $userID = null,
+        ?float $amount = null,
         string $urgencyLevel = 'low'
     ) {
         $this->donationID = $donationID;
-        $this->medicineID = $medicineID;
-        $this->quantity = $quantity;
+        $this->userID = $userID;
+        $this->amount = $amount;
+        
 
-        // Validate and set the urgency level
+        // Validate urgency level
         if (!in_array($urgencyLevel, self::URGENCY_LEVELS)) {
             throw new InvalidArgumentException("Invalid urgency level. Allowed values: " . implode(', ', self::URGENCY_LEVELS));
         }
         $this->urgencyLevel = $urgencyLevel;
     }
 
-    public function makeDonation() {
-        // Implementation for making a donation
+    public function makeDonation(): bool {
+        global $configs;
+        try {
+            $query = "INSERT INTO Donation (userID, amount, urgencyLevel) 
+                     VALUES (?, ?, ?, ?, ?)";
+            $stmt = $configs->conn->prepare($query);
+            $stmt->bind_param("idsss", 
+                $this->userID, 
+                $this->amount, 
+                $this->urgencyLevel
+            );
+
+            if ($stmt->execute()) {
+                $this->donationID = $stmt->insert_id;
+                return true;
+            }
+            return false;
+        } catch (mysqli_sql_exception $e) {
+            error_log("Error creating donation: " . $e->getMessage());
+            return false;
+        }
     }
 
-    // Function to calculate urgency based on urgency level and quantity
     public function calculateImpact(): float {
         $urgencyFactors = [
             'low' => 1.0,
@@ -42,18 +63,16 @@ class BasicDonation implements Donate {
             'high' => 2.0
         ];
 
-        $urgencyFactor = $urgencyFactors[$this->urgencyLevel];
-        return ($this->quantity ?? 0) * $urgencyFactor;
+        return ($this->amount ?? 0) * $urgencyFactors[$this->urgencyLevel];
     }
 
-    // Getters and setters for urgency level
+    public function getDonationID(): ?int {
+        return $this->donationID;
+    }
+
     public function getUrgencyLevel(): string {
         return $this->urgencyLevel;
     }
 
-    public function setUrgencyLevel(string $urgencyLevel): void {
-        
-    }
+
 }
-
-
