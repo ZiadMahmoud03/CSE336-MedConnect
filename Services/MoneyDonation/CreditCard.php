@@ -1,7 +1,6 @@
 <?php
 
-require_once 'IMoneyDonationStrategy.php';
-Class CashDonation implements IMoneyDonationStrategy {
+Class CreditCard implements IMoneyDonationStrategy {
     
     private $paymentModel;
 
@@ -16,7 +15,7 @@ Class CashDonation implements IMoneyDonationStrategy {
     // } 
 
     public function pay(){
-        echo "Cash Payment\n";
+        echo "Credit Card Payment\n";
     }
 
 }   
