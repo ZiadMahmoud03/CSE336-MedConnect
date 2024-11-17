@@ -4,26 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="<?=URL_ROOT?>/assets/css/style.css">
     <script src="https://kit.fontawesome.com/193fff84d2.js" crossorigin="anonymous"></script>
-    <script src="script.js"></script>
+    <script src="<?=URL_ROOT?>/assets/js/script.js"></script>
 </head>
 <body class="home">
     <div class="navbar">
         <div class="logo">
-            <img src="Images\Logo.png" alt="Logo">
+            <img src="<?=URL_ROOT?>/assets/images/Logo.png" alt="Logo">
         </div>
         <div class="buttons">
-        <a href="MoneyDonationView.php"><button>Donate Money</button></a>
-        <a href="ItemDonationView.php"><button>Donate Items</button></a>
+        <a href="<?=URL_ROOT?>/moneydonation"><button>Donate Money</button></a>
+        <a href="<?=URL_ROOT?>/itemdonation"><button>Donate Items</button></a>
         </div>
         <div class="search-bar">
             <input type="text" placeholder="Search...">
         </div>
         <div class="user-actions">
-        <a href="LoginView.php"><button>Login</button></a>
-        <a href="SignupView.php"><button>Register</button></a>
-        <a href="DonordashboardView.php"><i class="fa-solid fa-user" style="color: #000000;"></i></a>
+        <a href="<?=URL_ROOT?>/login"><button>Login</button></a>
+        <a href="<?=URL_ROOT?>/signup"><button>Register</button></a>
+        <a href="<?=URL_ROOT?>/donordashboard"><i class="fa-solid fa-user" style="color: #000000;"></i></a>
         </div>
     </div>
     
