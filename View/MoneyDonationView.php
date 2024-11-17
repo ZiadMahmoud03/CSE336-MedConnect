@@ -32,25 +32,27 @@
     <form action="/donation" method="post">
     <label for="hospital">Select Hospital</label> 
     <select id="hospital"> 
-    <option value="hospital1">Hospital 1</option>
-    <option value="hospital2">Hospital 2</option> 
-    <option value="hospital3">Hospital 3</option> 
-    <option value="hospital4">Hospital 4</option> 
+    <option value="hospital1">57357</option>
+    <option value="hospital2">Al-Nas Burn Hospital</option> 
+    <option value="hospital3">Magdi Yacoub</option> 
     </select>
         <label for="amount">Donation Amount:</label>
         <input type="number" id="amount" name="amount" min="1" required>
         
-       <!--- <label for="frequency">Frequency</label> 
-        <select id="frequency"> 
-        <option value="one-time">One Time</option> 
-        <option value="monthly">Monthly</option>
-        <option value="yearly">Yearly</option> 
-        </select> ----->
-        <label for="payment-method">Payment Option</label>
-         <select id="payment-method">
-         <option value="pickup">Pick Up</option> 
-         <option value="dropoff">Drop Off</option> 
+        <label for="frequency">Payment Method</label>
+        <select id="frequency" onchange="togglePaymentOption()">
+            <option value="credit-card">Credit Card</option>
+            <option value="debit-card">Debit Card</option>
+            <option value="cash">Cash</option>
+            <option value="paypal">Paypal</option>
         </select>
+
+        <label for="payment-method" id="payment-method-label" style="display:none;">Payment Option</label>
+        <select id="payment-method" style="display:none;">
+            <option value="pickup">Pick Up</option>
+            <option value="dropoff">Drop Off</option>
+        </select>
+
 
         <button type="submit">Donate</button>
     </form>
