@@ -138,8 +138,8 @@ run_queries(
             amount DECIMAL(10, 2) NOT NULL,
             user_id INT NOT NULL,
             donation_id INT NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE,
-            FOREIGN KEY (donation_id) REFERENCES Donation(donation_id) ON DELETE CASCADE
+            FOREIGN KEY (user_id) REFERENCES User(user_id),
+            FOREIGN KEY (donation_id) REFERENCES Donation(donation_id)
         );",
 
         "CREATE TABLE $configs->DB_NAME.$configs->DB_PAYMENT_DETAILS_TABLE (
@@ -148,8 +148,8 @@ run_queries(
             donation_id INT NOT NULL,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
             status ENUM('pending', 'completed', 'failed') NOT NULL,
-            FOREIGN KEY (payment_id) REFERENCES Payment(paymentID) ON DELETE CASCADE,
-            FOREIGN KEY (donation_id) REFERENCES Donation(donation_id) ON DELETE CASCADE
+            FOREIGN KEY (payment_id) REFERENCES Payment(payment_id),
+            FOREIGN KEY (donation_id) REFERENCES Donation(donation_id)
         );",
 
             
@@ -258,13 +258,13 @@ run_queries(
             ('credit_card', 100.00, 1, 1), 
             ('paypal', 50.00, 2, 2), 
             ('debit_card', 75.00, 3, 3), 
-            ('other_online', 120.00, 4, 4);",
+            ('other_online', 120.00, 4, 3);",
 
         "INSERT INTO $configs->DB_NAME.$configs->DB_PAYMENT_DETAILS_TABLE (payment_id, donation_id, status) VALUES 
             (1, 1, 'completed'), 
             (2, 2, 'pending'), 
             (3, 3, 'failed'), 
-            (4, 4, 'completed');"
+            (4, 3, 'completed');"
     ]
 );
 ?>
