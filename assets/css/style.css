@@ -334,7 +334,10 @@ select:focus {
     width: 140px;
     height: 140px;
 }
-
+.slider-container .card h4
+{
+    margin-top: 20px;
+}
 /* Card image styling */
 .slider-container .card .img img {
     width: 250px;
@@ -812,4 +815,39 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+/*-----------------------------------------------------------Item Donation------------------------------------------------------------*/
+.filter-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 15px 20px;
+    background-color: #f9fafc; /* Subtle background for distinction */
+    border-bottom: 2px solid #ddd; /* Softer border for a cleaner look */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow for depth */
+}
+
+.filter-container select {
+    padding: 12px 15px; /* Increased padding for better usability */
+    border: 1px solid #ddd; /* Softer border */
+    border-radius: 8px; /* Rounded corners for modern style */
+    font-size: 14px; /* Slightly larger font for better readability */
+    background-color: #fff; /* Contrasting white background */
+    color: #333; /* Neutral text color */
+    transition: all 0.3s ease; /* Smooth transition for interactions */
+    outline: none;
+    cursor: pointer;
+}
+
+/* Add hover effect for selects */
+.filter-container select:hover {
+    border-color: #007bff; /* Change border color on hover */
+    background-color: #f0f8ff; /* Light background change on hover */
+}
+
+/* Add focus effect for accessibility */
+.filter-container select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Blue glow */
 }
