@@ -18,14 +18,13 @@ skinparam linetype ortho
 package "Model" {
     abstract class Person {
         -personID: int
-        -name: String
+        -firstname: String
+        -lastname: String
         -email: String
         -password: String
         -address: Address
         -phone: int
         +login()
-        +createAccount()
-        +updateProfile()
     }
 
     class User extends Person {
@@ -36,14 +35,15 @@ package "Model" {
         -isVolunteer: boolean
         +trackDonationHistory()
         +trackDonationStatus()
-        +setRecurringDonations()
-        +receiveReminder()
         +fillDonationForm()
         +choosePickUpOrDropOff()
         +receiveNotification()
         +signUpForEvent(Event event)
         +updateSkills(List<String> newSkills)
         +checkAvailability()
+        +createAccount()
+        +updateProfile()
+        +deleteAccount()
     }
 
     class HospitalAdmin extends Person {
@@ -125,10 +125,40 @@ package "Model" {
         -donationID: int
         -medicineID: int
         -quantity: int
+        -urgency_level: UrgencyLevel
         +makeDonation()
+        +calculateImpact()
     }
 
-   
+    enum UrgencyLevel {
+        Low
+        Medium
+        High
+    }
+
+   class Payment {
+        -paymentID: int
+        -type: Type
+        -amount: int
+        +makePayment()
+    }
+
+    enum Type {
+        creditcard
+        debitcard
+        paypal
+        otheronline
+    }
+
+    class PaymentDetails {
+        -paymentDetailsID: int
+        -paymentID: int
+        -donationID: int
+        -amount: int
+        -paymentDate: date
+        +getDetails()
+    }
+
 }
 
 package "View" {
@@ -204,6 +234,7 @@ package "View" {
     class FilterResultsView extends BaseView {
         +displayFilteredResults()
     }
+
 }
 
 package "Controller" {
@@ -261,22 +292,22 @@ package "Controller" {
 package "Services" {
     abstract class DonationDecorator {
         -wrappedDonation: Donate
-        +makeDonation()
+        +calculateImpact()
     }
 
-    class RecurringDonation extends DonationDecorator {
-        -frequency
-        +makeDonation()
+    class LowUrgency extends DonationDecorator {
+        -urgencyFactor
+        +calculateImpact()
     }
 
-    class MedicalEquipmentDonation extends DonationDecorator {
-        -equipmentList: List
-        +makeDonation()
+    class MediumUrgency extends DonationDecorator {
+        -urgencyFactor
+        +calculateImpact()
     }
 
-    class FundsDonation extends DonationDecorator {
-        -amount
-        +makeDonation()
+    class HighUrgency extends DonationDecorator {
+        -urgencyFactor
+        +calculateImpact()
     }
 
     interface Observer {
@@ -426,5 +457,10 @@ HospitalAdminDashboardView --> UserController
 FilterResultsView --> DonationFilterController
 EventView --> EventController
 DonationView --> DonationController
+BasicDonation --> UrgencyLevel : uses
+Payment --> Type : uses
+User *-- Payment
+BasicDonation *-- Payment
+PaymentDetails *-- Payment
 
 @enduml
