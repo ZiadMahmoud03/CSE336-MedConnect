@@ -81,11 +81,13 @@ run_queries(
         );",
 
         // Create Donation table
+  
         "CREATE TABLE $configs->DB_NAME.$configs->DB_DONATION_TABLE (
             donation_id INT PRIMARY KEY AUTO_INCREMENT,
             medicine_id INT,
             quantity INT,
             user_id INT,
+            urgency_level ENUM('low', 'medium', 'high') DEFAULT 'low',
             FOREIGN KEY (user_id) REFERENCES User(user_id),
             FOREIGN KEY (medicine_id) REFERENCES Medicine(medicine_id)
         );",
@@ -201,16 +203,17 @@ run_queries(
             (5, 'Used', 5);",
 
         // Populate Donation table
-        "INSERT INTO $configs->DB_NAME.$configs->DB_DONATION_TABLE (donation_id, medicine_id, quantity, user_id) VALUES 
-            (1, 1, 10, 1),
-            (2, 2, 5, 2),
-            (3, 3, 15, 3);",
+        "INSERT INTO $configs->DB_NAME.$configs->DB_DONATION_TABLE (donation_id, medicine_id, quantity, user_id, urgency_level) VALUES 
+            (1, 1, 10, 1, 'high'),  
+            (2, 2, 5, 2, 'low'),     
+            (3, 3, 15, 3, 'medium');",
 
         // Populate Donation Details table
         "INSERT INTO $configs->DB_NAME.$configs->DB_DONATION_DETAILS_TABLE (donation_id, medicine_id, equipment_id, quantity) VALUES 
             (1, 1, 1, 10),
             (2, 2, NULL, 5),
             (3, 3, 3, 15);",
+
 
         // Populate Event table
         "INSERT INTO $configs->DB_NAME.$configs->DB_EVENT_TABLE (name, date, location, description) VALUES 
