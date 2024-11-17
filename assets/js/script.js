@@ -146,3 +146,26 @@ const authButtons = document.getElementById('auth-buttons');
         authButtons.style.display = 'none';
     });
 });
+
+/*---------------------------------------------PickUp/DropOff--------------------------------------------------------------*/
+function togglePaymentOption() {
+    const paymentMethodSelect = document.getElementById('frequency');
+    const paymentMethodLabel = document.getElementById('payment-method-label');
+    const paymentMethodDropdown = document.getElementById('payment-method');
+    
+    // Check if "Cash" is selected
+    if (paymentMethodSelect.value === 'cash') {
+        paymentMethodLabel.style.display = 'block';  // Show the Payment Option label
+        paymentMethodDropdown.style.display = 'block';  // Show the Payment Option dropdown
+    } else {
+        paymentMethodLabel.style.display = 'none';  // Hide the Payment Option label
+        paymentMethodDropdown.style.display = 'none';  // Hide the Payment Option dropdown
+    }
+}
+
+// Call the function on page load to ensure the correct initial state
+document.addEventListener('DOMContentLoaded', function() {
+    togglePaymentOption();  // Ensure the dropdown is hidden if "Cash" is not selected initially
+});
+
+
