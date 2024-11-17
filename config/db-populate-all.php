@@ -19,8 +19,8 @@ run_queries(
         // Create Person table with password field
         "CREATE TABLE $configs->DB_NAME.$configs->DB_PERSON_TABLE (
             person_id INT PRIMARY KEY AUTO_INCREMENT,
-            first_name VARCHAR(255) NOT NULL,
-            last_name VARCHAR(255) NOT NULL,
+            firstName VARCHAR(255) NOT NULL,
+            lastName VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL UNIQUE,
             phone VARCHAR(15),
             password VARCHAR(255) NOT NULL,  

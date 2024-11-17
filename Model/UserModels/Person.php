@@ -1,92 +1,143 @@
-
 <?php
 
-class Person {
-    private int $personID;
-    private string $name;
-    private string $email;
-    private string $phone;
-    private Address $address; // Assuming Address is a separate class
+require_once "config/db-conn-setup.php";
+require_once "Address.php"; 
 
-    public function __construct(int $personID, string $name, string $email, string $phone, Address $address) {
+abstract class Person {
+    private ?int $personID;
+    private ?string $firstName;
+    private ?string $lastName;
+    private ?string $email;
+    private ?string $phone;
+    private ?Address $address;
+
+    // Constructor for Person class
+    public function __construct(?int $personID = null, ?string $firstName = null, ?string $lastName = null, ?string $email = null, ?string $phone = null, ?Address $address = null) {
         $this->personID = $personID;
-        $this->name = $name;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
         $this->email = $email;
         $this->phone = $phone;
         $this->address = $address;
     }
 
-    public function login(string $email, string $password): bool {
-        // Get the database connection
+    // Getters and Setters
+    public function getPersonID(): ?int {
+        return $this->personID;
+    }
+
+    public function setPersonID(int $personID): void {
+        $this->personID = $personID;
+    }
+
+    public function getFirstName(): ?string {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): void {
+        $this->firstName = $firstName;
+    }
+
+    public function getLastName(): ?string {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): void {
+        $this->lastName = $lastName;
+    }
+
+    public function getEmail(): ?string {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): void {
+        $this->email = $email;
+    }
+
+    public function getPhone(): ?string {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): void {
+        $this->phone = $phone;
+    }
+
+    public function getAddress(): ?Address {
+        return $this->address;
+    }
+
+    public function setAddress(Address $address): void {
+        $this->address = $address;
+    }
+
+    // Save the person data into the database
+    public function save(): bool {
         $db = Database::getInstance();
-        
-        // Prepare the SQL statement to prevent SQL injection
+
+        // Prepare the SQL statement for inserting or updating the person
+        if ($this->personID === null) {
+            // Insert new person
+            $stmt = $db->prepare("INSERT INTO Person (first_name, last_name, email, phone, address_id) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssi", $this->firstName, $this->lastName, $this->email, $this->phone, $this->address->getAddressID());
+        } else {
+            // Update existing person
+            $stmt = $db->prepare("UPDATE Person SET first_name = ?, last_name = ?, email = ?, phone = ?, address_id = ? WHERE person_id = ?");
+            $stmt->bind_param("ssssii", $this->firstName, $this->lastName, $this->email, $this->phone, $this->address->getAddressID(), $this->personID);
+        }
+
+        return $stmt->execute();
+    }
+
+    // Method to create account (registration)
+    public function createAccount(string $password): bool {
+        $db = Database::getInstance();
+
+        // Prepare the SQL statement to insert the person data
+        $stmt = $db->prepare("INSERT INTO Person (first_name, last_name, email, phone, password, address_id) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssi", $this->firstName, $this->lastName, $this->email, $this->phone, $password, $this->address->getAddressID());
+
+        // Execute the query
+        return $stmt->execute();
+    }
+
+    // Method to update the profile
+    public function updateProfile(string $newPassword): bool {
+        $db = Database::getInstance();
+
+        // Prepare the SQL statement to update the password
+        $stmt = $db->prepare("UPDATE Person SET password = ? WHERE email = ?");
+        $stmt->bind_param("ss", $newPassword, $this->email);
+
+        // Execute the query
+        return $stmt->execute();
+    }
+
+    // Method to login
+    public function login(string $email, string $password): bool {
+        $db = Database::getInstance();
+
+        // Prepare the SQL statement to retrieve the person
         $stmt = $db->prepare("SELECT * FROM Person WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
-        
-        // Check if a user with the given email exists
+
+        // Check if the person exists and if the password matches
         if ($result->num_rows === 1) {
             $user = $result->fetch_assoc();
-            // Compare the provided password with the stored password
             if ($user['password'] === $password) {
-                // Set user properties (optional)
+                // Set object properties on successful login
                 $this->personID = $user['person_id'];
-                $this->name = $user['name'];
+                $this->firstName = $user['first_name'];
+                $this->lastName = $user['last_name'];
                 $this->email = $user['email'];
                 $this->phone = $user['phone'];
-                // Assuming Address object needs to be set here
-                $this->address = new Address($user['address_id']); // You may want to fetch address details as well
-                return true; // 
+                $this->address = new Address($user['address_id']); 
+
+                return true;
             }
         }
-        return false; 
-    }
-
-    public function createAccount(string $email, string $password, string $name, string $phone, Address $address): bool {
-        // Assuming $address is a valid Address object
-        $db = Database::getInstance();
-
-        // Prepare the SQL statement to prevent SQL injection
-        $stmt = $db->prepare("INSERT INTO Person (name, email, phone, password, address_id) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssi", $name, $email, $phone, $password, $address->getAddressID()); // Assuming Address has a getAddressID() method
-        
-        // Execute the query and return true if successful
-        return $stmt->execute();
-    }
-
-    public function updateProfile(string $email, string $newPassword): bool {
-        $db = Database::getInstance();
-
-        // Prepare the SQL statement to update user details
-        $stmt = $db->prepare("UPDATE Person SET password = ? WHERE email = ?");
-        $stmt->bind_param("ss", $newPassword, $email);
-        
-        // Execute the query and return true if successful
-        return $stmt->execute();
-    }
-
-    // Getters for properties
-    public function getPersonID(): int {
-        return $this->personID;
-    }
-
-    public function getName(): string {
-        return $this->name;
-    }
-
-    public function getEmail(): string {
-        return $this->email;
-    }
-
-    public function getPhone(): string {
-        return $this->phone;
-    }
-
-    public function getAddress(): Address {
-        return $this->address;
+        return false;
     }
 }
-
 ?>
