@@ -1,7 +1,13 @@
 <?php
 
-require_once "config/db-conn-setup.php";
-require_once "Address.php"; 
+
+ob_start();  
+
+require_once "config/db-conn-setup.php";  
+require_once "Model/Address.php";  
+
+ob_end_clean();  
+
 
 abstract class Person {
     protected? int $personID;

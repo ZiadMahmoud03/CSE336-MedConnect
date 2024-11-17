@@ -1,7 +1,13 @@
 <?php
+
+ob_start();  
+
 require_once "config/db-conn-setup.php";  
-require_once "Address.php";  
-require_once "Person.php";
+require_once "Model/Address.php";  
+require_once "Model/UserModels/Person.php";  
+
+ob_end_clean();  
+
 
 class User extends Person {
     private ?int $userID;
@@ -10,10 +16,11 @@ class User extends Person {
     private ?array $registeredEvents;
     private ?array $skills;
     private ?bool $isVolunteer;
-    private Address $address;
 
     public function __construct(?int $userID = null, ?DonationDetails $donationHistory = null, ?string $nationalID = null, 
-                                ?array $registeredEvents = null, ?array $skills = null, ?bool $isVolunteer = null, Address $address = null) {
+                                ?array $registeredEvents = null, ?array $skills = null, ?bool $isVolunteer = null, Address $address = null, ?string $firstName = null, ?string $lastName = null, ?string  $email = null, ?string  $phone = null) {
+        
+        parent::__construct(null, $firstName, $lastName, $email, $phone, $address);
         $this->userID = $userID;
         $this->donationHistory = $donationHistory;
         $this->nationalID = $nationalID;

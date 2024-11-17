@@ -1,16 +1,22 @@
 <?php
+
+
+ob_start();  
+
 require_once "config/db-conn-setup.php";  
-require_once "Address.php";  
-require_once "Item.php"; 
-require_once "Person.php";
+require_once "Model/Address.php";  
+require_once "Model/UserModels/Person.php";  
+require_once "Model/ItemModels/Item.php"; 
+ob_end_clean();  
+
 
 class HospitalAdmin extends Person {
     private ?int $adminID;
     private ?int $hospitalID;
 
     // Constructor for initializing HospitalAdmin model
-    public function __construct(?int $adminID = null, ?int $hospitalID = null, Address $address = null) {
-        parent::__construct($adminID, null, null, null, $address);  // Call the parent constructor (Person)
+    public function __construct(?int $adminID = null, ?int $hospitalID = null, Address $address = null, ?string $firstName = null, ?string $lastName = null, ?string  $email = null, ?string  $phone = null) {
+        parent::__construct(null, $firstName, $lastName, $email, $phone, $address);
         $this->adminID = $adminID;
         $this->hospitalID = $hospitalID;
     }
@@ -77,7 +83,7 @@ class HospitalAdmin extends Person {
     }
 
     // Method to receive notifications (just for tracking notifications in this case)
-    
+
     /* public function receiveNotification(string $message): bool {
         $db = Database::getInstance();
 
