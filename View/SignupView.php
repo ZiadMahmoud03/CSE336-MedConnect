@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registeration Form</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+    <link rel="stylesheet" href="<?=URL_ROOT?>/assets/css/style.css">
+    <script src="<?=URL_ROOT?>/assets/script.js"></script>
 </head>
 <body>
     <div class="form-container">
@@ -26,7 +26,7 @@
             <input type="password" name="password" placeholder=" Enter your password" required>
             <input type="password" name="conpassword" placeholder=" Confirm your password" required>
             <button type="submit">Register</button>
-            <p>Already have an account?<a href="LoginView.php"> Login</a></p>
+            <p>Already have an account?<a href="<?=URL_ROOT?>/login"> Login</a></p>
         </form>
       
         

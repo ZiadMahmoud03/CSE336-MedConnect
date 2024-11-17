@@ -2,7 +2,7 @@
 
 interface ILoginStrategy {
 
-    public function login( array $userCredentials);
+    public function login(array $userCredentials);
 
 }
 
