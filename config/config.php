@@ -1,10 +1,19 @@
 <?php
+
+    // if($_SERVER['SERVER_NAME']=='localhost'){
+    //     define('URL_ROOT', 'http://localhost/HOSPITALDONATIONS');
+    // }else{
+    //     define('URL_ROOT', 'http://www.mywebsite.com');
+    // }
+    define('URL_ROOT', 'http://localhost/HOSPITALDONATIONS');
     return (object) array(
+
+       
 
         // Application configuration
         'SITE_NAME'     => "MedConnect",
         'APP_ROOT'      => dirname(dirname(__FILE__)),
-        'URL_ROOT'      => 'http://localhost/HOSPITALDONATIONS', 
+       // 'URL_ROOT'      => 'http://localhost/HOSPITALDONATIONS', 
         'URL_SUBFOLDER' => '',
 
         // Database configuration

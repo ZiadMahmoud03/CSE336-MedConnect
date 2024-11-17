@@ -19,8 +19,8 @@ run_queries(
         // Create Person table with password field
         "CREATE TABLE $configs->DB_NAME.$configs->DB_PERSON_TABLE (
             person_id INT PRIMARY KEY AUTO_INCREMENT,
-            firstName VARCHAR(255) NOT NULL,
-            lastName VARCHAR(255) NOT NULL,
+            first_name VARCHAR(255) NOT NULL,
+            last_name VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL UNIQUE,
             phone VARCHAR(15),
             password VARCHAR(255) NOT NULL,  
@@ -172,6 +172,7 @@ run_queries(
             ('Sara', 'Hassan', 'sara.hassan@gmail.com', '01098765432', 'securepassword2', 2),
             ('Omar', 'El-Sayed', 'omar.elsayed@gmail.com', '01234567890', 'securepassword3', 3),
             ('Nadia', 'Khalil', 'nadia.khalil@gmail.com', '01555555555', 'securepassword4', 4),
+              ('Sara', 'Khalil', 'sara.khalil@gmail.com', '01555555554', 'securepassword6', 6),
             ('Mohamed', 'Salah', 'mohamed.salah@gmail.com', '01333333333', 'securepassword5', 5);",
 
         // Populate User table

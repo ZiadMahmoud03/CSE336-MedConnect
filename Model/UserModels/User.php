@@ -18,7 +18,7 @@ class User extends Person {
     private ?bool $isVolunteer;
 
     public function __construct(?int $userID = null, ?DonationDetails $donationHistory = null, ?string $nationalID = null, 
-                                ?array $registeredEvents = null, ?array $skills = null, ?bool $isVolunteer = null, Address $address = null, ?string $firstName = null, ?string $lastName = null, ?string  $email = null, ?string  phone = null) {
+                                ?array $registeredEvents = null, ?array $skills = null, ?bool $isVolunteer = null, Address $address = null, ?string $firstName = null, ?string $lastName = null, ?string  $email = null, ?string  $phone = null) {
         
         parent::__construct(null, $firstName, $lastName, $email, $phone, $address);
         $this->userID = $userID;
@@ -30,14 +30,14 @@ class User extends Person {
         $this->address = $address ?? new Address();  // Address should not be Null
     }
 
-    public function signUpForEvent(Event $event): bool {
-        $db = Database::getInstance();
+    // public function signUpForEvent(Event $event): bool {
+    //     $db = Database::getInstance();
 
-        $stmt = $db->prepare("INSERT INTO user_events (user_id, event_id) VALUES (?, ?)");
-        $stmt->bind_param("ii", $this->userID, $event->getEventID());
+    //     $stmt = $db->prepare("INSERT INTO user_events (user_id, event_id) VALUES (?, ?)");
+    //     $stmt->bind_param("ii", $this->userID, $event->getEventID());
 
-        return $stmt->execute();
-    }
+    //     return $stmt->execute();
+    // }
 
    /* public function trackDonationHistory(): array {
         $db = Database::getInstance();
@@ -84,21 +84,21 @@ class User extends Person {
         return $this->isVolunteer ?? false;
     }
 
-    public function updateProfile(string $newPassword, string $newEmail, string $newPhone, Address $newAddress): bool {
-        $db = Database::getInstance();
+    // public function updateProfile(string $newPassword, string $newEmail, string $newPhone, Address $newAddress): bool {
+    //     $db = Database::getInstance();
 
-        $stmt = $db->prepare("UPDATE Person SET email = ?, password = ?, phone = ?, address_id = ? WHERE user_id = ?");
-        $stmt->bind_param("ssssi", $newEmail, $newPassword, $newPhone, $newAddress->getAddressID(), $this->userID);
+    //     $stmt = $db->prepare("UPDATE Person SET email = ?, password = ?, phone = ?, address_id = ? WHERE user_id = ?");
+    //     $stmt->bind_param("ssssi", $newEmail, $newPassword, $newPhone, $newAddress->getAddressID(), $this->userID);
         
-        return $stmt->execute();
-    }
+    //     return $stmt->execute();
+    // }
 
     //Removed Address
     public function createAccount(string $email, string $password, string $firstName, string $lastName, string $phone, string $nationalID): bool {
         $db = Database::getInstance();
 
         $stmt = $db->prepare("INSERT INTO Person (firstName,lastName, email, phone, password, nationalID) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssi", $name, $email, $phone, $password, $nationalID);
+        $stmt->bind_param("ssssi", $email, $firstName,$lastName,  $password,$phone,$nationalID);
 
         return $stmt->execute();
     }
@@ -144,11 +144,11 @@ class User extends Person {
             if ($user['password'] === $password) {
 
                 $this->userID = $user['person_id'];
-                $this->name = $user['name'];
+                //$this->name = $user['name'];
                 $this->email = $user['email'];
-                $this->phone = $user['phone'];
+                //$this->phone = $user['phone'];
 
-                $this->address = new Address($user['address_id']); 
+//                $this->address = new Address($user['address_id']); 
                 return true; // Authentication successful
             }
         }

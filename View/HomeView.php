@@ -22,7 +22,7 @@
         </div>
         <div class="user-actions">
         <a href="<?=URL_ROOT?>/login"><button>Login</button></a>
-        <a href="<?=URL_ROOT?>/signup"><button>Register</button></a>
+        <a href="<?=URL_ROOT?>/user/register"><button>Register</button></a>
         <a href="<?=URL_ROOT?>/donordashboard"><i class="fa-solid fa-user" style="color: #000000;"></i></a>
         </div>
     </div>
