@@ -1,39 +1,50 @@
 <?php
 
-require_once 'ISubject.php';
+require "ISubject.php";
+require "IObserver.php";
+
 class NotificationSubject implements ISubject {
     private $observers = [];
-    private $state;
+    private $message;
 
-    // Subscribe an observer
-    public function subscribe(IObserver $observer) {
-        $this->observers[] = $observer;
-          echo "Observer subscribed. Total observers: " . count($this->observers) . "\n";
+    // Subscribe an observer to a specific notification type
+    public function subscribe(IObserver $observer, $notificationType) {
+        if (!isset($this->observers[$notificationType])) {
+            $this->observers[$notificationType] = [];
+        }
+        $this->observers[$notificationType][] = $observer;
     }
 
-    // Unsubscribe an observer
-    public function unsubscribe(IObserver $observer) {
-        foreach ($this->observers as $key => $obs) {
-            if ($obs === $observer) {
-                $observerType = get_class($obs); 
-                unset($this->observers[$key]);
-                echo "$observerType unsubscribed. Total observers: " . count($this->observers) . "\n";
-                break;
+    // Unsubscribe an observer from a specific notification type
+    public function unsubscribe(IObserver $observer, $notificationType) {
+        if (isset($this->observers[$notificationType])) {
+            // Remove the observer by filtering out the matching observer object
+            $this->observers[$notificationType] = array_filter(
+                $this->observers[$notificationType],
+                fn($subscriber) => $subscriber !== $observer
+            );
+            // Re-index the array to prevent gaps
+            $this->observers[$notificationType] = array_values($this->observers[$notificationType]);
+        }
+    }
+
+    // Notify all observers based on notificationType
+    public function notifySubscribers() {
+        foreach ($this->observers as $notificationType => $observers) {
+            foreach ($observers as $observer) {
+                $observer->update($notificationType, $this->message);
             }
         }
-        $this->observers = array_values($this->observers); // Reindex array
     }
 
-    public function setState($state) {
-        $this->state = $state;
-       // $this->notifySubscribers($notificationType, $message);
+    // Notify new message to all observers
+    public function newMessage() {
+        $this->notifySubscribers();
     }
 
-    // Notify all observers
-    public function notifySubscribers($notificationType, $message) {
-        echo "Notifying observers with type: $notificationType\n";
-        foreach ($this->observers as $observer) {
-            $observer->update($notificationType, $message);
-        }
+    // Set the message and trigger the notification to all subscribed observers
+    public function setMessage($message) {
+        $this->message = $message;
+        $this->newMessage();  // Notify all observers after setting the message
     }
 }
