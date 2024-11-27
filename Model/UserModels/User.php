@@ -18,7 +18,7 @@ class User extends Person {
     private ?bool $isVolunteer;
 
     public function __construct(?int $userID = null, ?DonationDetails $donationHistory = null, ?string $nationalID = null, 
-                                ?array $registeredEvents = null, ?array $skills = null, ?bool $isVolunteer = null, Address $address = null, ?string $firstName = null, ?string $lastName = null, ?string  $email = null, ?string  phone = null) {
+                                ?array $registeredEvents = null, ?array $skills = null, ?bool $isVolunteer = null, Address $address = null, ?string $firstName = null, ?string $lastName = null, ?string  $email = null, ?string  $phone = null) {
         
         parent::__construct(null, $firstName, $lastName, $email, $phone, $address);
         $this->userID = $userID;
