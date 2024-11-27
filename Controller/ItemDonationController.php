@@ -5,6 +5,9 @@ ini_set('display_errors', value: 1);
 class ItemDonationController {
     
     use Controller;
+    public function index() {
+        $this->view('itemdonation');
+    }
 
     // Create a new donation
     public function createDonation($donationType, $description, &$donationDetails) {
@@ -55,18 +58,18 @@ class ItemDonationController {
     }
 }
 
-$donationDetails = array();
-$donationController = new ItemDonationController();
+// $donationDetails = array();
+// $donationController = new ItemDonationController();
 
-// Create a donation for equipment
-$donationController->createDonation("Equipment", "Donating medical equipment for surgeries", $donationDetails);
+// // Create a donation for equipment
+// $donationController->createDonation("Equipment", "Donating medical equipment for surgeries", $donationDetails);
 
-// Update the donation to add a description change
-$donationID = array_key_first($donationDetails);  // Get the first donation ID for update
-$donationController->updateDonation($donationID, "Medicine", "Donating essential medical supplies", $donationDetails);
+// // Update the donation to add a description change
+// $donationID = array_key_first($donationDetails);  // Get the first donation ID for update
+// $donationController->updateDonation($donationID, "Medicine", "Donating essential medical supplies", $donationDetails);
 
-// View the updated donation
-$donationController->viewDonation($donationID, $donationDetails);
+// // View the updated donation
+// $donationController->viewDonation($donationID, $donationDetails);
 
-// Delete the donation
-$donationController->deleteDonation($donationID, $donationDetails);
+// // Delete the donation
+// $donationController->deleteDonation($donationID, $donationDetails);
