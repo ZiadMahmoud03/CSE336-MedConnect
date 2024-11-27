@@ -259,7 +259,8 @@ run_queries(
             ('credit_card', 100.00, 1, 1), 
             ('paypal', 50.00, 2, 2), 
             ('debit_card', 75.00, 3, 3), 
-            ('other_online', 120.00, 4, 3);",
+            ('other_online', 120.00, 4, 3),
+            ('credit_card', 50.00, 2, 2);",
 
         "INSERT INTO $configs->DB_NAME.$configs->DB_PAYMENT_DETAILS_TABLE (payment_id, donation_id, status) VALUES 
             (1, 1, 'completed'), 

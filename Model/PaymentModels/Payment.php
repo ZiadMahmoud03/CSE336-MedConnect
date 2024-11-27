@@ -49,15 +49,14 @@ class Payment {
     }
 
     public function recordPayment(int $userID, int $donationID): bool {
-        global $configs;
+        $conn = Database::getInstance(); // Get the connection from the Database class
         try {
             $query = "INSERT INTO Payment (type, amount, userID, donationID) VALUES (?, ?, ?, ?)";
-            $stmt = $configs->conn->prepare($query);
+            $stmt = $conn->prepare($query);
             $stmt->bind_param("sdii", $this->type, $this->amount, $userID, $donationID);
-            
+
             if ($stmt->execute()) {
-                // Set the paymentID after successful insertion
-                $this->paymentID = $stmt->insert_id;
+                $this->paymentID = $stmt->insert_id; // Set the paymentID
                 return true;
             }
             return false;
@@ -68,10 +67,10 @@ class Payment {
     }
 
     public function getPaymentInfo(?int $specificPaymentID = null): ?array {
-        global $configs;
+        $conn = Database::getInstance(); // Get the connection from the Database class
         try {
             $paymentIDToUse = $specificPaymentID ?? $this->paymentID;
-            
+
             if ($paymentIDToUse === null) {
                 throw new InvalidArgumentException("No payment ID provided");
             }
@@ -81,8 +80,8 @@ class Payment {
                      LEFT JOIN User u ON p.userID = u.userID 
                      LEFT JOIN Donation d ON p.donationID = d.donationID 
                      WHERE p.paymentID = ?";
-            
-            $stmt = $configs->conn->prepare($query);
+
+            $stmt = $conn->prepare($query);
             $stmt->bind_param("i", $paymentIDToUse);
             $stmt->execute();
             $result = $stmt->get_result();

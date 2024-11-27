@@ -20,6 +20,8 @@ class Database
 
         if ($this->connection->connect_error) {
             die("Connection failed: " . $this->connection->connect_error);
+        } else {
+            error_log("Database connection successful");
         }
     }
 
