@@ -19,8 +19,8 @@ run_queries(
         // Create Person table with password field
         "CREATE TABLE $configs->DB_NAME.$configs->DB_PERSON_TABLE (
             person_id INT PRIMARY KEY AUTO_INCREMENT,
-            firstName VARCHAR(255) NOT NULL,
-            lastName VARCHAR(255) NOT NULL,
+            first_name VARCHAR(255) NOT NULL,
+            last_name VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL UNIQUE,
             phone VARCHAR(15),
             password VARCHAR(255) NOT NULL,  
@@ -258,7 +258,8 @@ run_queries(
             ('credit_card', 100.00, 1, 1), 
             ('paypal', 50.00, 2, 2), 
             ('debit_card', 75.00, 3, 3), 
-            ('other_online', 120.00, 4, 3);",
+            ('other_online', 120.00, 4, 3),
+            ('credit_card', 50.00, 2, 2);",
 
         "INSERT INTO $configs->DB_NAME.$configs->DB_PAYMENT_DETAILS_TABLE (payment_id, donation_id, status) VALUES 
             (1, 1, 'completed'), 
