@@ -1,7 +1,7 @@
 <?php
 
 ob_start();
-require_once "config/db-conn-setup.php";
+require_once "../config/db-conn-setup.php";
 ob_end_clean();
 
 class Equipment extends Item {
@@ -20,10 +20,37 @@ class Equipment extends Item {
         $this->equipmentID = $equipmentID ?? 0; 
     }
     
-
+    public function insertEquipment(): bool {
+        try {
+            $itemID = $this->getOrCreateItemID(); // Check or create the item in the Item table
+        
+            // Get the database connection
+            $conn = Database::getInstance();
+        
+            // Insert the equipment into the Equipment table
+            $query = "INSERT INTO Equipment
+                      (equipment_condition, item_id) VALUES (?, ?)";
+        
+            $stmt = $conn->prepare($query); // Use $conn, not $configs->conn
+            $stmt->bind_param("si", $this->condition, $itemID);
+            $stmt->execute();
+        
+            if ($stmt->affected_rows > 0) {
+                $this->equipmentID = $stmt->insert_id; // Get the new equipment ID
+                return true;
+            }
+        
+            return false;
+        } catch (mysqli_sql_exception $e) {
+            error_log("Database error in insertEquipment: " . $e->getMessage());
+            throw new Exception("Error inserting new equipment");
+        }
+    }
+    
+    
     public function checkAvailability(): bool {
         global $configs;
-        
+  
         try {
             // Use prepared statement to prevent SQL injection
             $query = "SELECT i.quantity_available 
