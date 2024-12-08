@@ -122,6 +122,34 @@ class Equipment extends Item {
             throw new Exception("Error fetching equipment description");
         }
     }
+
+    public function updateField(string $field, $value): bool {
+        try {
+            // Validate the field name to prevent SQL injection
+            $validFields = ['name', 'description', 'quantity_available'];
+            if (!in_array($field, $validFields)) {
+                throw new Exception("Invalid field name: $field");
+            }
+    
+            // Get the database connection
+            $conn = Database::getInstance();
+    
+            // Corrected SQL query with consistent alias
+            $query = "UPDATE Item i 
+                      JOIN Equipment m ON i.item_id = m.item_id 
+                      SET i.$field = ? 
+                      WHERE m.equipment_id = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("si", $value, $this->equipmentID);
+            $stmt->execute();
+    
+            return $stmt->affected_rows > 0;
+        } catch (mysqli_sql_exception $e) {
+            error_log("Database error in updateField: " . $e->getMessage());
+            throw new Exception("Error updating field $field");
+        }
+    }
+    
     
 
     // Getters and setters

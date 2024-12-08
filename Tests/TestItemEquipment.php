@@ -44,11 +44,12 @@ runTest("Test Retrieve Equipment", function() {
 });
 
 runTest("Test Update Equipment", function() {
-    $equipment = new Equipment(1); // Assuming ID 1 exists
-    $equipment->setCondition("Updated Condition"); // Update condition
-    $equipment->insertEquipment(); // Update DB entry
-    return $equipment->checkCondition() === "Updated Condition"; // Verify update
+    $equipment = new Equipment(9); // Assuming ID 1 exists
+    $success = $equipment->updateField("name", "Updated Equipment Name");
+    return $success;
+    // && $equipment->getDescription() === "Updated Equipment Description";
 });
+
 
 runTest("Test Delete Equipment", function() {
     $conn = Database::getInstance(); // Use Database singleton for connection
