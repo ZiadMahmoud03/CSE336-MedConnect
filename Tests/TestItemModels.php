@@ -1,9 +1,16 @@
 <?php
 
-// Include the required files
-require_once "config/db-conn-setup.php";
-require_once "Model/ItemModels/Item.php";  // Assuming this contains the parent Item class
-require_once "Model/ItemModels/Equipment.php";  // The file containing your Equipment class
+// Include required files
+require_once "../config/db-conn-setup.php";
+require_once "../Model/ItemModels/Item.php"; 
+require_once "../Model/ItemModels/Equipment.php"; 
+
+// if (!isset($configs->conn) || !$configs->conn instanceof mysqli) {
+//     die("Database connection not properly initialized.");
+// }
+
+
+// TODO - Fix Update and Delete operations for Equipment class
 
 // Function to run test and display results
 function runTest($testName, $callback) {
@@ -20,36 +27,43 @@ function runTest($testName, $callback) {
     echo "----------------------------------------\n";
 }
 
-// Test cases
-// 1. Test object creation
-runTest("Equipment Object Creation", function() {
-    $equipment = new Equipment(1, 1, "Test Equipment", 5, "Good");
-    return $equipment instanceof Equipment;
+// Test CRUD operations for Equipment class
+runTest("Test Insert Equipment", function() {
+    $equipment = new Equipment(null, null, "Test Equipment", 10, "New", "Test equipment description");
+    return $equipment->insertEquipment(); // Test insertion
 });
 
-// 2. Test availability check for available equipment
-runTest("Check Availability - Should be available", function() {
-    $equipment = new Equipment(1, 1, "Test Equipment", 5, "Good");
-    return $equipment->checkAvailability();
+runTest("Test Retrieve Equipment", function() {
+    $equipment = new Equipment(1); // Assuming ID 1 exists in the database
+    $availability = $equipment->checkAvailability(); // Check availability
+    $condition = $equipment->checkCondition(); // Check condition
+    return [
+        "availability" => $availability,
+        "condition" => $condition
+    ];
 });
 
-// 3. Test condition check
-runTest("Check Condition", function() {
-    $equipment = new Equipment(1, 1, "Test Equipment", 5, "Good");
-    $condition = $equipment->checkCondition();
-    echo "Condition returned: $condition\n";
-    return $condition !== "Error retrieving condition";
+runTest("Test Update Equipment", function() {
+    $equipment = new Equipment(1); // Assuming ID 1 exists
+    $equipment->setCondition("Updated Condition"); // Update condition
+    $equipment->insertEquipment(); // Update DB entry
+    return $equipment->checkCondition() === "Updated Condition"; // Verify update
 });
 
-// 4. Test with non-existent equipment ID
-runTest("Check Non-existent Equipment", function() {
-    $equipment = new Equipment(999, 999, "Non-existent Equipment", 0, "Unknown");
-    $available = $equipment->checkAvailability();
-    $condition = $equipment->checkCondition();
-    echo "Availability: " . ($available ? "Yes" : "No") . "\n";
-    echo "Condition: $condition\n";
-    return !$available; // Should return false for non-existent equipment
+runTest("Test Delete Equipment", function() {
+    $conn = Database::getInstance(); // Use Database singleton for connection
+
+    $equipmentID = 1; // Specify the ID of the equipment to delete (replace with an appropriate test value)
+
+    $query = "DELETE FROM Equipment WHERE equipment_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $equipmentID);
+    $stmt->execute();
+
+    return $stmt->affected_rows > 0; // Return true if a row was successfully deleted
 });
+
+
 
 // Clean up any open database connections
 if (isset($configs) && isset($configs->conn)) {

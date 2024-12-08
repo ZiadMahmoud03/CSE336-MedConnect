@@ -47,22 +47,22 @@ class Equipment extends Item {
         }
     }
     
-    
+
     public function checkAvailability(): bool {
-        global $configs;
-  
         try {
+            // Get the database connection
+            $conn = Database::getInstance();
+    
             // Use prepared statement to prevent SQL injection
             $query = "SELECT i.quantity_available 
-                      FROM {$configs->DB_NAME}.Item i 
-                      JOIN {$configs->DB_NAME}.Equipment m ON i.item_id = m.item_id 
+                      FROM Item i 
+                      JOIN Equipment m ON i.item_id = m.item_id 
                       WHERE m.equipment_id = ?";
-                      
-            $stmt = $configs->conn->prepare($query);
+            $stmt = $conn->prepare($query);
             $stmt->bind_param("i", $this->equipmentID);
             $stmt->execute();
             $result = $stmt->get_result();
-
+    
             if ($result && $row = $result->fetch_assoc()) {
                 return $row['quantity_available'] > 0;
             }
@@ -72,20 +72,20 @@ class Equipment extends Item {
             throw new Exception("Error checking equipment availability");
         }
     }
-
+    
     public function checkCondition(): string {
-        global $configs;
-        
         try {
+            // Get the database connection
+            $conn = Database::getInstance();
+    
             $query = "SELECT `equipment_condition` 
-                      FROM {$configs->DB_NAME}.Equipment 
+                      FROM Equipment 
                       WHERE equipment_id = ?";
-                      
-            $stmt = $configs->conn->prepare($query);
+            $stmt = $conn->prepare($query);
             $stmt->bind_param("i", $this->equipmentID);
             $stmt->execute();
             $result = $stmt->get_result();
-
+    
             if ($result && $row = $result->fetch_assoc()) {
                 $this->condition = $row['equipment_condition'];
                 return $this->condition ?: "Condition not set";
@@ -96,32 +96,33 @@ class Equipment extends Item {
             throw new Exception("Error checking equipment condition");
         }
     }
+    
 
     public function getDescription(): string {
-        global $configs;
-        
         try {
-            // SQL query to fetch the description from the database
+            // Get the database connection
+            $conn = Database::getInstance();
+    
             $query = "SELECT i.description 
-                      FROM {$configs->DB_NAME}.Item i 
-                      JOIN {$configs->DB_NAME}.Equipment e ON i.item_id = e.item_id 
+                      FROM Item i 
+                      JOIN Equipment e ON i.item_id = e.item_id 
                       WHERE e.equipment_id = ?";
-                      
-            $stmt = $configs->conn->prepare($query);
+            $stmt = $conn->prepare($query);
             $stmt->bind_param("i", $this->equipmentID);
             $stmt->execute();
             $result = $stmt->get_result();
-
+    
             if ($result && $row = $result->fetch_assoc()) {
                 return $row['description'] ?: "No description available.";
             }
-
+    
             return "Description not found.";
         } catch (mysqli_sql_exception $e) {
             error_log("Database error in getDescription: " . $e->getMessage());
             throw new Exception("Error fetching equipment description");
         }
     }
+    
 
     // Getters and setters
     public function getCondition(): string {
